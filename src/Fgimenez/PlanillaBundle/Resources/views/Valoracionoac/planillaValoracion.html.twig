@@ -1,0 +1,469 @@
+<html>
+    <head>
+        {% block stylesheets %}
+            <link href="{{ asset('bundles/reporte/css/bundleReporte.css') }}" type="text/css" rel="stylesheet" />
+        {% endblock %}
+    </head>
+    <body>
+        {% block page_content %}
+
+            <table style="border: 1px solid #fff;" >
+                <tr>
+                    <td style="border: 1px solid #fff;" align="left" ><span class="small"><strong>C.G.R<br>OFICINA DE ATENCIÓN AL CIUDADANO</strong> </span></td>
+
+                </tr>
+            </table>
+            <table style="border-top: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #fff;">
+                <tr>
+                    <td style="border-top: 1px solid #fff; border-left: 1px solid #fff;" align="center" ><span class="large"><strong>ATENCIÓN AL CIUDADANO</strong> </span></td>
+                    <td style="border-top: 1px solid #fff;" align="center" ><span class="MEDIUM"><strong>TIPO ATENCIÓN</strong> </span></td>
+                    <td style="border-top: 1px solid #fff; border-right: 1px solid #fff;" align="center" ><span class="MEDIUM"><strong>ID CASO </strong> {{planilla.codigo}}</span></td>
+
+                </tr>
+                <tr>
+                    <td align="center" style="border-left: 1px solid #fff;"><span class="small" >&nbsp; </span></td>
+                    <td align="center" ><span class="medium">{{planilla.TipoAtencion.nombre | capitalize}}</span></td>
+                    <td align="center" style="border-right: 1px solid #fff;" ><span class="medium">FECHA {{ planilla.created|date('d-m-Y') }}</span></td>
+                    {#<td align="center" style="border-right: 1px solid #fff;" >
+                        
+                        <input type="checkbox" name="agree" value="1" checked="checked" /> <label for="agree">I agree </label>
+                    </td>#}
+                </tr>
+
+            </table>
+            <table style="border-left: 1px solid #fff; border-right: 1px solid #fff;" >
+                <tr>
+                    <td colspan="2" style="border-left: 1px solid #fff; border-right: 1px solid #fff;"> <span align="center" class="medium"><strong>USUARIO DEL SERVICIO</strong></span></td>
+
+                </tr>
+
+                {% for solicitantes in planilla.solicitantes | slice (0,1)%}
+                    <tr>
+                        <td style="border-left: 1px solid #fff; width: 67%" class="medium">
+                            APELLIDOS Y NOMBRES: <br>
+                            {{ solicitantes.persona.primerApellido }} {{ solicitantes.persona.segundoApellido}} {{ solicitantes.persona.primerNombre}} {{ solicitantes.persona.segundoNombre  }}
+                        </td>
+                        <td style="border-right: 1px solid #fff; width: 33%" class="medium">
+                            CÉDULA DE IDENTIDAD N&deg;<br>
+                            {{ solicitantes.persona.nacionalidad | upper }}-{{ solicitantes.persona.cedula }}
+
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td style="border-left: 1px solid #fff; width: 67%" class="medium">
+                            DIRECCIÓN: <br>
+                            <strong>Estado:</strong> {{ solicitantes.persona.direccion.estado |title}},
+                            <strong>Municipio:</strong> {{ solicitantes.persona.direccion.municipio |title }}, 
+                            <strong>Parroquia:</strong>  {{ solicitantes.persona.direccion.parroquia |title}}
+                            <strong>Sector:</strong>{{ solicitantes.persona.direccion.sector |title}},
+                            <strong>Urbanizacion:</strong> {{ solicitantes.persona.direccion.urbanizacion |title}}
+                        </td>
+                        <td style="border-right: 1px solid #fff; width: 33%" class="medium">
+                            TELÉFONO:<br>
+                            {{ solicitantes.persona.telefono }}
+
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <td  colspan="2" style="border-left: 1px solid #fff; border-right: 1px solid #fff; border-bottom: 1px solid #fff;">
+                        <span align="center" class="medium"><strong>DENUNCIANTES RELACIONADOS:</strong></span>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td   style="border-left: 1px solid #fff; border-right: 1px solid #fff; border-bottom: 1px solid #fff;">
+                        <span align="center" class="medium"><strong>APELLIDOS Y NOMBRES</strong></span>
+                    </td>
+                    <td   style="border-left: 1px solid #fff; border-right: 1px solid #fff; border-bottom: 1px solid #fff;">
+                        <span align="center" class="medium"><strong>CÉDULA DE IDENTIDAD</strong></span>
+                    </td>
+
+                </tr>
+                {% for solicitantes in planilla.solicitantes |slice(1) %}
+                    <tr>
+
+                        <td   style="border: 1px solid #fff;" class="medium">
+                            {{ solicitantes.persona.primerApellido }} {{ solicitantes.persona.segundoApellido}} {{ solicitantes.persona.primerNombre}} {{ solicitantes.persona.segundoNombre  }}
+                        </td>
+                        <td   style="border: 1px solid #fff;" class="medium">
+
+                            {{ solicitantes.persona.nacionalidad | upper }}-{{ solicitantes.persona.cedula }}
+                        </td>
+
+                    </tr>
+                {% endfor%}
+
+
+            </table>
+            <br/><br/>
+            <table style="border-left: 1px solid #fff; border-right: 1px solid #fff;" >
+                <tr>
+                    <td colspan="4" style="border-left: 1px solid #fff; border-right: 1px solid #fff;"> <span align="center" class="medium"><strong>DOCUMENTO QUE GENERÓ EL CASO</strong></span></td>
+
+                </tr>
+
+
+                <tr align="center">
+                    <td style="border-left: 1px solid #fff; width: 25%" class="medium">
+                        TIPO 
+
+                    </td>
+                    <td style=" width: 25%" class="medium">
+                        NÚMERO DE OFICIO
+
+                    </td>
+                    <td style=" width: 25%" class="medium">
+                        FECHA
+
+                    </td>
+                    <td style="border-right: 1px solid #fff; width: 25%" class="medium">
+                        FECHA RECIBIDO
+
+                    </td>
+
+                </tr>
+                <tr align="center">
+                    <td style="border-left: 1px solid #fff; width: 25%" class="medium">
+                        {%if planilla.PlanillaValoracionOAC.numeroOficio is null%} 
+                            ESCRITO
+                        {%else%}
+                            OFICIO
+                        {%endif%}
+
+                    </td>
+                    <td style="width: 25%" class="medium">
+                        {%if planilla.PlanillaValoracionOAC.numeroOficio is null%} 
+                            N / A
+                        {%else%}
+                            {{planilla.PlanillaValoracionOAC.numeroOficio}}
+                        {%endif%}
+
+
+                    </td>
+                    <td style="width: 25%" class="medium">
+                        {{planilla.PlanillaValoracionOAC.fechaEscrito | date('d-m-Y')}}
+
+                    </td>
+                    <td style="border-right: 1px solid #fff; width: 25%" class="medium">
+                        {{planilla.created | date('d-m-Y')}}
+
+                    </td>
+
+                </tr>
+
+
+            </table>
+            <br/>
+            <table  style="border-left: 1px solid #fff; border-right: 1px solid #fff; border-top: 1px solid #fff;">
+                <tr>
+                    <td colspan="4" class="medium" style="border-top: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #fff;">
+                        <br/>TIPO DE REQUERIMIENTO: {{planilla.TipoCaso.nombre}}
+                    </td>
+
+                </tr>
+                {#<tr>
+                    <td colspan="4" class="medium" style="border-top: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #fff;">
+                        <br/>NOMBRE DEL ORGANISMO EN QUE FUE PRESENTADO: {{ente_presentado | title}}
+                    </td>
+
+                </tr>#}
+
+
+                <tr>
+                    <td colspan="4" class="medium" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
+                        SOPORTES DOCUMENTALES: {%if planilla.documentos is empty%}NO{%else%}SI{%endif%}
+                    </td>
+
+                </tr>
+                {#{% for documento in planilla.documentos %}
+                    <tr class="medium" >
+
+                        <td style="border-left: 1px solid #fff; ">{{ planilla.codigo }} # {{ loop.index }}</td>
+                        <td > {{ documento.TipoDocumento.nombre }}</td>
+                        <td > {{ documento.Nombre | title }}</td>
+                        <td style="border-right: 1px solid #fff;">{{ documento.resumen |title | raw }}</td>
+
+                    </tr>
+                {% endfor%}#}
+
+            </table>
+            <table  style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
+                <tr>
+                    <td colspan="4" class="medium" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
+                        DESCRIPCION DE LOS HECHOS: <br><br>
+                        {{planilla.hecho | capitalize}}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+                    <td colspan="4" class="medium" style="border-left: 1px solid #fff; border-right: 1px solid #fff; ">
+                        LOS HECHOS SEÑALADOS SON COMPETENCIA DE CGR: {{pertenece}}
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="4" class="medium" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
+                        ORGANISMO COMPETENTE: <br/>&nbsp;&nbsp;{{competencia}}
+                    </td>
+
+                </tr>
+
+
+
+            </table>
+
+            <table style="border-left: 1px solid #fff; border-right: 1px solid #fff;" >
+                <tr>
+                    <td colspan="3" style="border-left: 1px solid #fff; border-right: 1px solid #fff;"> <span align="left" class="medium"><strong>VALORACIÓN</strong></span></td>
+
+                </tr>
+                <tr align="center">
+                    <td colspan="3" style="border-left: 1px solid #fff; border-right: 1px solid #fff; border-bottom: 1px solid #fff;">
+                        {%if pertenece=='SI'%}
+                            <span align="left" class="large">Los hechos descritos como irregulares se encuentran enmarcados dentro del ámbito de las competencias que constitucional y legalmente tiene atribuidas este Máximo Organo Contralor</span>
+                        {%else%}
+                            
+                            <span align="left" class="large">Los hechos descritos como irregulares escapan al ámbito de las competencias que constitucional y legalmente tiene atribuidas este Máximo Organo Contralor</span>
+                        {%endif%}
+
+                    </td>
+
+
+                </tr>
+                <tr align="left">
+                    <td colspan="3" style="border: 1px solid #fff;" class="medium">
+                        SOPORTES DOCUMENTALES
+
+                    </td>
+                </tr>
+                {% for documento in planilla.documentos %}
+                    <tr class="medium" >
+
+                        <td width="20%" style="border: 1px solid #fff;" >{{ planilla.codigo }} # {{ loop.index }}</td>
+                        <td width="20%" style="border: 1px solid #fff;" > {{ documento.TipoDocumento.nombre }}</td>
+                        <td width="60%" style="border: 1px solid #fff;"> {{ documento.Nombre | title }}</td>
+
+
+                    </tr>
+                {% endfor%}
+                <tr align="left">
+                    <td colspan="3" style="border-left: 1px solid #fff; border-right: 1px solid #fff; border-top: 1px solid #fff; border-bottom: 1px solid #fff;" class="medium">
+                        &nbsp;
+
+                    </td>
+                </tr>
+                <tr align="left">
+                    <td colspan="3" style="border: 1px solid #fff; border-right: 1px solid #fff; border-top: 1px solid #fff; border-bottom: 1px solid #fff;" class="medium">
+                        REFERENCIAS NORMATIVAS
+
+                    </td>
+                </tr>
+
+                {% for referencia in planilla.PlanillaValoracionOAC.ValoracionOACReferenciasNormativas%}
+                    <tr class="large" >
+
+                        <td colspan="3" style="border: 1px solid #fff; ">{{ loop.index }}. {{referencia.ReferenciasNormativas.nombre | title}}.&nbsp;
+                            Artículo:{{referencia.articulo}}, {%if referencia.numeral %}Numeral: {{referencia.numeral}}, {%endif%} {%if referencia.literal%}Literal: {{referencia.literal}} {%endif%}</td>
+
+                    </tr>
+                {% endfor%}
+                <tr align="left">
+                    <td colspan="3" style="border-left: 1px solid #fff; border-right: 1px solid #fff; border-top: 1px solid #fff; border-bottom: 1px solid #fff;" class="medium">
+                        &nbsp;
+
+                    </td>
+                </tr>
+                <tr align="left">
+                    <td colspan="4" style="border: 1px solid #fff; border-right: 1px solid #fff; border-top: 1px solid #fff; border-bottom: 1px solid #fff;" class="medium">
+                        CONCLUSIÓN Y RECOMENDACIÓN
+
+                    </td>
+                </tr>
+
+
+                <tr class="large" >
+
+                    <td colspan="3" style="border: 1px solid #fff; ">{{planilla.PlanillaValoracionOAC.observaciones}}</td>
+
+                </tr>
+
+
+            </table>
+            <br/><br/><br/>
+            <table style="border-left: 1px solid #fff; border-right: 1px solid #fff;" >
+                <tr>
+                    <td colspan="3" style="border-left: 1px solid #fff; border-right: 1px solid #fff;"> <span align="center" class="medium"><strong>PARTICULARES, FUNCIONARIOS O EMPLEADOS DENUNCIADOS</strong></span></td>
+
+                </tr>
+
+                {%for involucrado in planilla.PlanillaInvolucrado | slice(0,1)%}
+
+                    {% if involucrado.idTipoInvolucrado>=1 and involucrado.idTipoInvolucrado<=4%}
+
+                        <tr><!--Fila Encabezado-->
+                            <td align="center" style="border-left: 1px solid #fff;"><span class="medium negrita">Tipo Involucrado </span></td>
+                            <td align="center" ><span class="medium negrita">Cédula de Identidad</span> </td>
+                            <td align="center" style="border-right: 1px solid #fff;"><span class="medium negrita">Nombres y Apellidos</span></td>
+
+
+                        </tr>
+                    {%endif%}
+                    {% if involucrado.idTipoInvolucrado==5%}
+
+                        <tr><!--Fila Encabezado-->
+                            <td align="center" style="border-left: 1px solid #fff;"><span class="medium negrita">Tipo Involucrado </span></td>
+                            <td align="center" colspan="2" style="border-right: 1px solid #fff;" ><span class="medium negrita">Nombre del Ente</span> </td>
+
+                        </tr>
+                    {%endif%}
+                    {% if involucrado.idTipoInvolucrado== 6%}
+
+                        <tr><!--Fila Encabezado-->
+                            <td align="center" style="border-left: 1px solid #fff;"><span class="medium negrita">Tipo Involucrado </span></td>
+                            <td align="center" colspan="2" style="border-right: 1px solid #fff;"><span class="medium negrita">Nombre Instancia Poder Popular</span> </td>
+
+
+
+                        </tr>
+                    {%endif%}
+                    {% if involucrado.idTipoInvolucrado== 7%}
+
+                        <tr><!--Fila Encabezado-->
+                            <td align="center" style="border-left: 1px solid #fff;"><span class="medium negrita">Tipo Involucrado </span></td>
+                            <td align="center" colspan="2" style="border-right: 1px solid #fff;"><span class="medium negrita">Nombre Sindicatos</span> </td>
+
+                        </tr>
+                    {%endif%}
+                    {% if involucrado.idTipoInvolucrado== 8%}
+
+                        <tr><!--Fila Encabezado-->
+                            <td align="center" style="border-left: 1px solid #fff;"><span class="medium negrita">Tipo Involucrado </span></td>
+                            <td align="center" colspan="2" style="border-right: 1px solid #fff;" ><span class="medium negrita">Nombre Empresa Privada</span> </td>
+
+                        </tr>
+                    {%endif%}
+
+                {%endfor%}
+
+
+                {%for involucrado in planilla.PlanillaInvolucrado %}
+
+                    {% if involucrado.idTipoInvolucrado>=1 and involucrado.idTipoInvolucrado<=4%}
+
+                        <tr>
+
+                            <td align="left" class="medium" align="left" style="border-left: 1px solid #fff;"> {{ involucrado.tipoinvolucrado.nombreInvolucrado |title }}</td>
+                            {% for persona in involucrado.ciudadanos %}
+
+                                <td class="medium" align="left" > {{ persona.nacionalidad |upper }}-{{ persona.cedula }}</td>
+                                <td class="medium" align="left" style="border-right: 1px solid #fff;"> {{ persona.primerNombre |title }} {{ persona.segundoNombre |title }}, {{ persona.primerApellido |title }} {{ persona.segundoApellido |title }}</td>
+
+                            {%endfor%}
+
+                        </tr>
+                    {%endif%}
+                    {% if involucrado.idTipoInvolucrado==5%}
+
+                        <tr>
+
+                            <td align="left" class="medium" align="left" style="border-left: 1px solid #fff;"> {{ involucrado.tipoinvolucrado.nombreInvolucrado |title }}</td>
+
+                            {% for ente in involucrado.entes %}
+                                <td colspan="2" align="left" style="border-right: 1px solid #fff;"><span class="medium " value="TipoInvolucrado">{{ ente.desEnte |title }}</span></td>
+                                {% endfor %}
+
+
+
+
+                        </tr>
+                    {%endif%}
+                    {% if involucrado.idTipoInvolucrado==6%}
+
+                        <tr>
+
+                            <td align="left" class="medium" align="left" style="border-left: 1px solid #fff;"> {{ involucrado.tipoinvolucrado.nombreInvolucrado |title }}</td>
+                            {% for ipp in involucrado.organizacionespp %}
+                                <td colspan="2" align="left" style="border-right: 1px solid #fff;"><span class="medium" value="TipoInvolucrado">{{ ipp.nombre |title }}</span></td>
+                                {% endfor %}
+
+                        </tr>
+                    {%endif%}
+                    {% if involucrado.idTipoInvolucrado==7%}
+
+                        <tr>
+
+                            <td align="left" class="medium" align="left" style="border-left: 1px solid #fff;"> {{ involucrado.tipoinvolucrado.nombreInvolucrado |title }}</td>
+                            {% for sindicato in involucrado.sindicatos %}
+                                <td colspan="2" align="left" style="border-right: 1px solid #fff;"><span class="medium" value="TipoInvolucrado">{{ sindicato.nombre |title }}</span></td>
+                                {% endfor %}
+
+                        </tr>
+                    {%endif%}
+                    {% if involucrado.idTipoInvolucrado==8%}
+
+                        <tr>
+
+                            <td align="left" class="medium" align="left" style="border-left: 1px solid #fff;"> {{ involucrado.tipoinvolucrado.nombreInvolucrado |title }}</td>
+                            {% for empresa in involucrado.empresaPrivada %}
+                                <td align="left" colspan="2" style="border-right: 1px solid #fff;" ><span class="medium " value="TipoInvolucrado">{{ empresa.nombre |title }}</span></td>
+                                {% endfor %}
+
+                        </tr>
+                    {%endif%}
+                {%endfor%}
+
+
+            </table>
+            <table style="border-left: 1px solid #fff; border-right: 1px solid #fff;" >
+                <tr>
+                    <td  style="border-left: 1px solid #fff; border-right: 1px solid #fff;"> <span align="left" class="medium">LA DENUNCIA HA SIDO PRESENTADA ANTE OTRA INSTANCIA: {%if ente_presentado==""%}NO{%else%}SI{%endif%}</span></td>
+
+                </tr>
+                <tr>
+                    <td  class="medium" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
+                        <br/>MENCIONE LOS DATOS: {{ente_presentado | title}}
+                    </td>
+
+                </tr>
+            </table>
+            <table style="border-left: 1px solid #fff; border-right: 1px solid #fff;" >
+                <tr>
+                    <td colspan="4" style="border-left: 1px solid #fff; border-right: 1px solid #fff;"> <span align="left" class="medium"></span></td>
+
+                </tr>
+                <tr>
+                    <td  colspan="2" style="border-left: 1px solid #fff;"><span align="center" class="medium">ATENDIDO POR</span></td>
+                    <td  colspan="2" style="border-right: 1px solid #fff;"><span align="center" class="medium">REVISADO POR</span></td>
+
+                </tr>
+                <tr>
+                    <td  colspan="2" style="border-left: 1px solid #fff;"><span align="center" class="medium">NOMBRES Y APELLIDOS:<br><br>{{atendido}}</span></td>
+                    <td  colspan="2" style="border-right: 1px solid #fff;"><span align="center" class="medium">NOMBRES Y APELLIDOS:<br><br>{{revisado}}<br><br><br><br></span></td>
+
+                </tr>
+                <tr>
+                    <td  style="border-left: 1px solid #fff; border-right: 1px solid #fff;"><span align="left" class="medium">FIRMA: </span></td>
+                    <td  style="border-left: 1px solid #fff;"><span align="center" class="medium">Fecha:{{"now" |date('d/m/Y')}}</span></td>
+                    <td  style="border-right: 1px solid #fff;"><span align="left" class="medium">FIRMA: </span></td>
+                    <td  style="border-left: 1px solid #fff; border-right: 1px solid #fff;"><span align="center" class="medium">Fecha:{{"now" |date('d/m/Y')}}</span></td>
+
+                </tr>
+            </table>
+            <table style="border: 1px solid #fff;" >
+                <tr>
+                    <td colspan="4" style="border: 1px solid #fff;"> <span align="left" class="medium"></span></td>
+
+                </tr>
+            </table>
+
+
+
+
+        {% endblock %}
+    </body>
+</html>

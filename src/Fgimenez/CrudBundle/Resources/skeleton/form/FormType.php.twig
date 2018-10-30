@@ -1,0 +1,90 @@
+<?php
+
+namespace {{ namespace }}\Form{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+
+{% block use_statements %}
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+{% if not configure_options_available %}
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+{% endif %}
+{% if fields_associated|length > 0 %}
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+{% endif %}
+use Symfony\Component\OptionsResolver\OptionsResolver;
+{% endblock use_statements %}
+
+{% block class_definition %}
+class {{ form_class }} extends AbstractType
+{% endblock class_definition %}
+{
+{% block class_body %}
+    {%- if fields|length > 0 %}
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+{% for field in fields %}
+            ->add('{{ field }}')
+{% endfor %}
+{% for field in fields_associated %}
+            ->add('{{ field.name }}', {{field.widget}}, array(
+                'class' => '{{field.class}}',
+                'choice_label' => '{{field.choice_label}}',
+{% if field.type == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::ONE_TO_ONE') or field.type == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::MANY_TO_ONE')%}
+                'placeholder' => 'Please choose',
+                'empty_data' => null,
+                'required' => false
+ {%endif %}
+
+{% if field.type == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::MANY_TO_MANY') %}
+                'expanded' => true,
+                'multiple' => true
+{%endif %}
+            )) 
+{% endfor %}
+        ;
+    }
+    {% endif %}
+
+    {%- if not configure_options_available %}
+
+    /**
+     * Sets the default options for this type.
+     *
+     * This method should be removed when upgrading to Symfony 2.7.
+     *
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
+    }
+    {% endif %}
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => '{{ namespace }}\Entity{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity_class }}'
+        ));
+    }
+
+    {%- if get_name_required %}
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return '{{ form_type_name }}';
+    }
+    {% endif %}
+
+{% endblock class_body %}
+}

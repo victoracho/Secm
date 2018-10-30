@@ -1,0 +1,42 @@
+documento_crud:
+    path:  /
+    defaults: { _controller: "FgimenezDocumentoBundle:Documento:index" }
+
+documento_crud_show:
+    path:  /{id}/show
+    defaults: { _controller: "FgimenezDocumentoBundle:Documento:show" }
+
+documento_crud_new:
+    path:  /new
+    defaults: { _controller: "FgimenezDocumentoBundle:Documento:new" }
+
+documento_crud_create:
+    path:  /create
+    defaults: { _controller: "FgimenezDocumentoBundle:Documento:create" }
+    requirements: { _method: post }
+
+documento_crud_edit:
+    path:  /{id}/edit
+    defaults: { _controller: "FgimenezDocumentoBundle:Documento:edit" }
+
+documento_crud_update:
+    path:  /{id}/update
+    defaults: { _controller: "FgimenezDocumentoBundle:Documento:update" }
+    requirements: { _method: post|put }
+
+documento_crud_delete:
+    path:  /{id}/delete
+    defaults: { _controller: "FgimenezDocumentoBundle:Documento:delete" }
+    requirements: { _method: post|delete }
+    
+documento_crud_by_id_delete:
+    path:  /delete/{id}
+    defaults: { _controller: "FgimenezDocumentoBundle:Documento:deleteById" }
+    requirements: { _method: get }
+    
+
+documento_crud_bulk_action:
+    path:  /bulk-action
+    defaults: { _controller: "FgimenezDocumentoBundle:Documento:bulk" }
+    requirements: { _method: post }
+    

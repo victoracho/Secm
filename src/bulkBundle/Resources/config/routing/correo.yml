@@ -1,0 +1,42 @@
+correo:
+    path:  /
+    defaults: { _controller: "bulkBundle:correo:index" }
+
+correo_show:
+    path:  /{id}/show
+    defaults: { _controller: "bulkBundle:correo:show" }
+
+correo_new:
+    path:  /new
+    defaults: { _controller: "bulkBundle:correo:new" }
+
+correo_create:
+    path:  /create
+    defaults: { _controller: "bulkBundle:correo:create" }
+    requirements: { _method: post }
+
+correo_edit:
+    path:  /{id}/edit
+    defaults: { _controller: "bulkBundle:correo:edit" }
+
+correo_update:
+    path:  /{id}/update
+    defaults: { _controller: "bulkBundle:correo:update" }
+    requirements: { _method: post|put }
+
+correo_delete:
+    path:  /{id}/delete
+    defaults: { _controller: "bulkBundle:correo:delete" }
+    requirements: { _method: post|delete }
+    
+correo_by_id_delete:
+    path:  /delete/{id}
+    defaults: { _controller: "bulkBundle:correo:deleteById" }
+    requirements: { _method: get }
+    
+
+correo_bulk_action:
+    path:  /bulk-action
+    defaults: { _controller: "bulkBundle:correo:bulk" }
+    requirements: { _method: post }
+    

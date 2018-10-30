@@ -1,0 +1,342 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Documento
+{% endblock %}
+
+{% block page_content %}
+
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <div class="box box-primary">
+
+                <div class="box-header with-border">
+
+                    <h3 class="box-title">Bandeja de Entrada Asignar Casos</h3>
+                </div>               
+
+                <!-- FILTERING -->
+                <div class="col-md-12">
+                    <div  id="filters" class="collapse">
+
+                        <form class="well" action="{{ path('planilla_index_asignar') }}" method="get" >
+                            <div class="row">
+
+                                <div class="col-md-2">{{ form_row(filterForm.codigo) }}</div>
+
+                                <div class="col-md-2">{{ form_row(filterForm.ultimo_status) }}</div>
+
+                                <div class="col-md-2">{{ form_row(filterForm.tipo_atencion) }}</div>
+
+                                <div class="col-md-2">{{ form_row(filterForm.AnalistaAsignado) }}</div>
+
+                                {# <div class="col-md-6">
+                                     {{ form_widget(filterForm) }}
+                                 </div>#}
+                                <br>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-warning" name="filter_action" value="filter"> <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtrar</button>
+                                        <button type="submit" class="btn btn-default" name="filter_action" value="reset"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Limpiar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- END FILTERING -->
+
+
+                <div class="col-md-3 pull-left">
+
+                    <!-- PAGE SIZE -->
+                    <div class="pagination form-inline ">
+                        <select class = "form-control"  onchange="window.location = this.value" >
+                            <option value='{{ path('planilla_index_asignar', app.request.query.all|merge({'pcg_show': '5'})) }}, "planilla_index_asignar"' {% if app.request.get('pcg_show') == 5 %} selected {% endif %}>5</option>
+                            <option value='{{ path('planilla_index_asignar', app.request.query.all|merge({'pcg_show': '10'})) }}, "planilla_index_asignar"' {% if app.request.get('pcg_show') == 10 %} selected {% endif %}>10</option>
+                            <option value='{{ path('planilla_index_asignar', app.request.query.all|merge({'pcg_show': '20'})) }}, "planilla_index_asignar"'  {% if app.request.get('pcg_show') == 20 %} selected {% endif %}>20</option>
+                            <option value='{{ path('planilla_index_asignar', app.request.query.all|merge({'pcg_show': '50'})) }}, "planilla_index_asignar"' {% if app.request.get('pcg_show') == 50 %} selected {% endif %}>50</option>
+                            <option value='{{ path('planilla_index_asignar', app.request.query.all|merge({'pcg_show': '100'})) }}, "planilla_index_asignar"' {% if app.request.get('pcg_show') == 100 %} selected {% endif %}>100</option>
+                            <option value='{{ path('planilla_index_asignar', app.request.query.all|merge({'pcg_show': '500'})) }}, "planilla_index_asignar"' {% if app.request.get('pcg_show') == 500 %} selected {% endif %}>500</option>
+                        </select>
+                    </div>
+                    <!-- END PAGE SIZE -->
+
+                </div>
+
+                <div class="col-md-6">
+
+
+                </div>
+
+                <div class="col-md-3">
+
+                    {#<a class="btn btn-primary h3 pull-right" href="{{ path('planilla_new') }}" style="margin-bottom:10px">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuevo
+                    </a>#}
+                    <a class="btn btn-default dropdown-toggle pull-right h3" data-toggle="collapse" data-target="#filters">
+                        Filtro
+                        <span class="caret"></span>
+                    </a>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        {% for type, flashMessages in app.session.flashbag.all() %} 
+                            {% for flashMessage in flashMessages %}
+                                <div class="alert alert-{{ type }}">
+                                    {{ flashMessage|raw }}
+                                </div>
+                            {% endfor %} 
+                        {% endfor %} 
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="table-responsive col-md-12 text-center">
+                        <div class="col-md-1">
+                            {# Por Asignar#}
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="Caso registrado pendiente por asignar a un analista">
+                                <strong>Por Asignar</strong>
+                            </span>
+                        </div>
+                        <div class="col-md-1 bg-warning">
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="Caso asignado a un analista">
+                                <strong>Asignado<br>&nbsp;</strong>
+                            </span>
+                        </div>
+                        <div class="col-md-1 bg-success">
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="El analista inició el proceso de valoración">
+                                <strong>Iniciado <br>Valoraci&oacute;n</strong>
+                            </span>
+                        </div>
+                        <div class="col-md-2 bg-danger">
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="El analista inició el proceso de valoración del caso hace 3 días o más">
+                                <strong>Iniciado Valoraci&oacute;n <br>3 días ó más</strong>
+
+                            </span>
+                        </div>
+                        <div class="col-md-1 bg-info">
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="El caso ha sido valorado por el analista">
+                                <strong>Valorado<br>&nbsp;</strong>
+
+                            </span>
+                        </div>
+                        <div class="col-md-1 bg-danger">
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="El supervisor ha realizado correcciones al caso">
+                                <strong>Corregir Valoración</strong>
+
+                            </span>
+                        </div>
+                        <div class="col-md-1 bg-info">
+                            <span  data-tooltip aria-haspopup="true" class="has-tip" title="El supervisor ha evaluado el caso y esta listo para remitir">
+                                <strong>Evaluado<br>&nbsp;</strong>
+
+                            </span>
+                        </div>
+                        <div class="col-md-1 bg-info">
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="El caso ha sido remitido a la Dirección u Órgano correspondiente">
+                                <strong>Remitido<br>&nbsp;</strong>
+
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="table-responsive col-md-12">
+
+
+
+
+                        <div class="box">
+                            <div class="box-header">
+                                {#<h3 class="box-title">Registros</h3>#}
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+
+                                <form method="POST" id="bulk_form" action="{{ path('planilla_bulk_action') }} ">
+
+                                    <table id="example2" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th width="20px">{#<input type="checkbox" class="check-all" onclick="toggleAll(this)">#}</th>
+
+                                                {% import "PetkoparaCrudGeneratorBundle::macros/th_sortable.html.twig" as macros %}
+
+                                                <th>{{macros.th_sortable('codigo',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla','Código')}}</th>
+
+                                                <th>{{macros.th_sortable('MecanismoPresentacion',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla', 'Mecanismo Presentación')}}</th>
+
+                                                <th>{{macros.th_sortable('ultimoStatus',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla','Estatus')}}</th>
+
+                                                <th >{{macros.th_sortable('fechaUltimoStatus',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla','Fecha Estatus')}}</th>
+                                                <th>{{macros.th_sortable('AnalistaAsignado',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') ,'planilla', 'Analista Asignado')}}</th>
+                                                    {#<th>{{macros.th_sortable('updated',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla')}}</th>
+                                                    <th>{{macros.th_sortable('created',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla')}}</th>#}
+                                                <th width = "130px">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {% for planilla in planillas %}
+                                                {% set indice=loop.index-1%}
+
+                                                {%if planilla.UltimoStatus.id==2%}
+                                                    <tr class="default">
+                                                    {%endif%}
+                                                    {%if planilla.UltimoStatus.id==3%}
+
+                                                    <tr class="warning">
+                                                    {%endif%}
+                                                    {%if planilla.UltimoStatus.id==4%}
+
+                                                        {%if  excedido[indice]=='si'%}
+                                                        <tr class="danger">
+                                                        {%else%}
+                                                        <tr class="success">
+                                                        {%endif%}
+
+
+                                                    {%endif%}
+
+                                                    {%if planilla.UltimoStatus.id==5 or planilla.UltimoStatus.id==7 or planilla.UltimoStatus.id==8%}
+
+                                                    <tr class="info">
+                                                    {%endif%}
+                                                    
+                                                    {%if planilla.UltimoStatus.id==6%}
+
+                                                    <tr class="danger">
+                                                    {%endif%}
+                                                    
+                                                    
+
+                                                    {%if planilla.UltimoStatus.id==2 %}
+
+                                                        <td><input type="checkbox" name="ids[]" onclick='bulkSubmitBtnManage();' class="check-all" value="{{planilla.id}}"/></td>
+                                                        {%else%}
+                                                        <td>&nbsp;</td>
+                                                    {%endif%}
+
+
+                                                    <td>{{ planilla.codigo }}</td>
+                                                    <td>{%- if planilla.MecanismoPresentacion %}{{ planilla.TipoAtencion.nombre }}{% endif %}</td>
+
+                                                    <td>{{planilla.UltimoStatus.nombre | title}}</td>
+                                                    <td>{%- if planilla.fechaUltimoStatus %}{{ planilla.fechaUltimoStatus|date('Y-m-d') }}{% endif %}</td>
+                                                    
+                                                    {#<td>{%- if planilla.created %}{{ planilla.fechaUltimoStatus|date('Y-m-d H:i:s') }}{% endif %}</td>#}
+
+                                                    <td>{{ planilla.analistaAsignado}}</td>
+                                                    {#<td>{%- if planilla.updated %}{{ planilla.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                                    <td>{%- if planilla.created %}{{ planilla.created|date('Y-m-d H:i:s') }}{% endif %}</td>#}
+
+                                                    <td class="actions">
+                                                        {#<a  onclick="return confirm('Are you sure!');" title="Delete" class="btn btn-danger btn-sm" href="{{ path('planilla_by_id_delete', { 'id': planilla.id}) }}">
+                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                        </a>#}
+                                                        <a title='Ver' class="btn btn-info btn-sm" href="{{ path('planilla_show', { 'id': planilla.id, 'origen':'asignar'}) }}">
+                                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                                        </a>
+                                                        {%if planilla.UltimoStatus.id==2 %}         
+                                                            <a  title='Asignar' class="btn btn-success btn-sm" href="{{ path('planilla_asignar', { 'id': planilla.id, 'origen':'asignar' }) }}">
+                                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                                            </a>
+                                                            <a  title='Reverso para editar caso' class="btn btn-warning btn-sm" href="{{ path('planilla_reversar', { 'id': planilla.id }) }}">
+                                                                <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+                                                            </a>
+                                                        {%endif%}
+                                                        {%if planilla.UltimoStatus.id==3 or planilla.UltimoStatus.id==4%}         
+                                                            <a  title='Reasignar' class="btn btn-bitbucket btn-sm" href="{{ path('planilla_asignar', { 'id': planilla.id, 'origen':'reasignar' }) }}">
+                                                                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                                                            </a>
+                                                        {%endif%}
+                                                        {%if planilla.UltimoStatus.id==5 %}
+
+                                                            <a  title='Evaluar Valoración' class="btn btn-soundcloud btn-sm" href="{{ path('valoracionoac_evaluar', {'id':planilla.PlanillaValoracionOAC.id}) }}">
+                                                                <span class="glyphicon glyphicon-saved" aria-hidden="true"></span>
+                                                            </a>
+
+                                                        {%endif%}
+
+                                                    </td>
+                                                </tr>
+
+                                            {% endfor %}
+                                        </tbody>
+
+                                    </table>
+                                </form>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+
+                    </div>
+
+                </div>           
+
+
+
+
+
+                <div class="row">
+                    <div class="col-md-4 pull-left">
+                        <div class="pagination form-inline ">
+                            <select class = "form-control" name="analista" form="bulk_form" >
+                                <option value="0">Asignar Analista</option>
+                                {%for analista in analistas%}
+
+                                    <option value="{{analista.username}}">{{analista.nombre | title}}</option>
+
+                                {%endfor%}
+
+                                {#<option value="">--Choose--</option>
+                                <option value="1">DESCRIPCION</option>#}
+                            </select>
+                            <input type="submit" id='bulkSubmitBtn' form="bulk_form" class="form-control btn btn-success btn-sm" value="Asignar">
+
+                            {#<a  title='Asignar' class="btn btn-success btn-sm" href="{{ path('planilla_asignar', { 'id': 'ids[]' }) }}">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </a>#}
+                        </div> 
+                    </div>
+
+                    <div class="col-md-12 text-center">
+                        {{ pagerHtml|raw }} 
+                    </div>
+                </div> 
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts_inline %}
+    <script>
+        $(function () {
+            $('#example2').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": false,
+                "autoWidth": true,
+                "order": [[4, 'desc']],
+                "language": {
+                    //"info": "Mostrando la página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "emptyTable": " "
+                }
+            });
+        });
+    </script>
+{% endblock %}
+

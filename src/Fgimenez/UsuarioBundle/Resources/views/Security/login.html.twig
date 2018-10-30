@@ -1,0 +1,8 @@
+{#% extends "FOSUserBundle::layout.html.twig" %#}
+{#% extends "AvanzuAdminThemeBundle::layout/login-layout.html.twig" %#}
+{#% extends "frontend.html.twig" %#}
+{#  page_content #}
+
+{% block fos_user_content %}
+    {{ include('FOSUserBundle:Security:login_content.html.twig') }}
+{% endblock fos_user_content %}

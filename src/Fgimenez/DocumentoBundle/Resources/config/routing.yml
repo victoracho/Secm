@@ -1,0 +1,15 @@
+fgimenez_documento_tipodocumento:
+    resource: "@FgimenezDocumentoBundle/Resources/config/routing/tipodocumento.yml"
+    prefix:   /tipodocumento/crud
+
+fgimenez_documento_crud:
+    resource: "@FgimenezDocumentoBundle/Resources/config/routing/documento.yml"
+    prefix:   /crud
+    
+fgimenez_documentoFront:
+    resource: "@FgimenezDocumentoBundle/Resources/config/routing/documentoFront.yml"
+    prefix:   /front       
+
+fgimenez_documento_homepage:
+    path:     /
+    defaults: { _controller: FgimenezDocumentoBundle:Default:index }

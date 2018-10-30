@@ -1,0 +1,235 @@
+<?php
+
+namespace Fgimenez\PlanillaBundle\Entity;
+
+/**
+ * ValoracionReferenciasNormativas
+ */
+class ValoracionReferenciasNormativas
+{
+    /**
+     * @var int
+     */
+    private $id;
+
+    /**
+     * @var int
+     */
+    private $idValoracion;
+
+    /**
+     * @var int
+     */
+    private $idReferenciasNormativas;
+
+    /**
+     * @var int
+     */
+    private $articulo;
+
+    /**
+     * @var string
+     */
+    private $numeral;
+
+    /**
+     * @var string
+     */
+    private $literal;
+
+    
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set idValoracion
+     *
+     * @param integer $idValoracion
+     *
+     * @return ValoracionReferenciasNormativas
+     */
+    public function setIdValoracion($idValoracion)
+    {
+        $this->idValoracion = $idValoracion;
+
+        return $this;
+    }
+
+    /**
+     * Get idValoracion
+     *
+     * @return int
+     */
+    public function getIdValoracion()
+    {
+        return $this->idValoracion;
+    }
+
+    /**
+     * Set idReferenciasNormativas
+     *
+     * @param integer $idReferenciasNormativas
+     *
+     * @return ValoracionReferenciasNormativas
+     */
+    public function setIdReferenciasNormativas($idReferenciasNormativas)
+    {
+        $this->idReferenciasNormativas = $idReferenciasNormativas;
+
+        return $this;
+    }
+
+    /**
+     * Get idReferenciasNormativas
+     *
+     * @return int
+     */
+    public function getIdReferenciasNormativas()
+    {
+        return $this->idReferenciasNormativas;
+    }
+
+    /**
+     * Set articulo
+     *
+     * @param integer $articulo
+     *
+     * @return ValoracionReferenciasNormativas
+     */
+    public function setArticulo($articulo)
+    {
+        $this->articulo = $articulo;
+
+        return $this;
+    }
+
+    /**
+     * Get articulo
+     *
+     * @return int
+     */
+    public function getArticulo()
+    {
+        return $this->articulo;
+    }
+
+    /**
+     * Set numeral
+     *
+     * @param string $numeral
+     *
+     * @return ValoracionReferenciasNormativas
+     */
+    public function setNumeral($numeral)
+    {
+        $this->numeral = $numeral;
+
+        return $this;
+    }
+
+    /**
+     * Get numeral
+     *
+     * @return string
+     */
+    public function getNumeral()
+    {
+        return $this->numeral;
+    }
+
+    /**
+     * Set literal
+     *
+     * @param string $literal
+     *
+     * @return ValoracionReferenciasNormativas
+     */
+    public function setLiteral($literal)
+    {
+        $this->literal = $literal;
+
+        return $this;
+    }
+
+    /**
+     * Get literal
+     *
+     * @return string
+     */
+    public function getLiteral()
+    {
+        return $this->literal;
+    }
+
+    
+    
+    
+    /**
+     * @var \Fgimenez\PlanillaBundle\Entity\ValoracionOAC
+     */
+    private $valoracionOAC;
+
+
+    /**
+     * Set valoracionOAC
+     *
+     * @param \Fgimenez\PlanillaBundle\Entity\ValoracionOAC $valoracionOAC
+     *
+     * @return ValoracionReferenciasNormativas
+     */
+    public function setValoracionOAC(\Fgimenez\PlanillaBundle\Entity\ValoracionOAC $valoracionOAC = null)
+    {
+        $this->valoracionOAC = $valoracionOAC;
+
+        return $this;
+    }
+
+    /**
+     * Get valoracionOAC
+     *
+     * @return \Fgimenez\PlanillaBundle\Entity\ValoracionOAC
+     */
+    public function getValoracionOAC()
+    {
+        return $this->valoracionOAC;
+    }
+    
+    /**
+     * @var \Mmartin4\MantenimientoBundle\Entity\Referencias_Normativas
+     */
+    private $referenciasNormativas;
+
+
+    /**
+     * Set referenciasNormativas
+     *
+     * @param \Mmartin4\MantenimientoBundle\Entity\Referencias_Normativas $referenciasNormativas
+     *
+     * @return ValoracionReferenciasNormativas
+     */
+    public function setReferenciasNormativas(\Mmartin4\MantenimientoBundle\Entity\Referencias_Normativas $referenciasNormativas = null)
+    {
+        $this->referenciasNormativas = $referenciasNormativas;
+
+        return $this;
+    }
+
+    /**
+     * Get referenciasNormativas
+     *
+     * @return \Mmartin4\MantenimientoBundle\Entity\Referencias_Normativas
+     */
+    public function getReferenciasNormativas()
+    {
+        return $this->referenciasNormativas;
+    }
+}

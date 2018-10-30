@@ -1,0 +1,11 @@
+fgimenez_planilla_crud:
+    resource: "@FgimenezPlanillaBundle/Resources/config/routing/planilla.yml"
+    prefix:   /
+    
+fgimenez_planilla_tipocaso_crud:
+    resource: "@FgimenezPlanillaBundle/Resources/config/routing/tipocaso.yml"
+    prefix:   /tipocaso/crud     
+
+fgimenez_planilla_valoracionoac:
+    resource: "@FgimenezPlanillaBundle/Resources/config/routing/valoracionoac.yml"
+    prefix:   /valoracionoac

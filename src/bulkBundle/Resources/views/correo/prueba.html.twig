@@ -1,0 +1,122 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+{{ parent() }} - Nuevo correo
+{% endblock %}
+
+
+
+
+
+{% block javascript %}
+
+{% endblock %}
+
+
+{% block page_content %}
+
+
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-9">
+
+
+
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Registre sus Datos <span class="glyphicon glyphicon-file" aria-hidden="true"></span> </h3>
+            </div>
+
+
+
+            <div class="row">
+    <div class="col-md-12">
+        {% for type, flashMessages in app.session.flashbag.all() %}
+        {% for flashMessage in flashMessages %}
+        <div class="alert alert-{{ type }}">
+            {{ flashMessage|raw }}
+        </div>
+         {% endfor %}
+         {% endfor %}
+    </div>
+</div>
+
+
+            {{ form_start(form) }}
+            <div class="box-body">
+
+
+
+            <div class="col-md-4">
+                <label><span class="text-danger">*&nbsp;</span>Nombre</label>{{form_widget(form.nombre, { 'attr': {'class': 'solo-letra'} })}}
+
+            </div>
+
+
+            <div class="col-md-4">
+                <label><span class="text-danger">*&nbsp;</span> Fecha de Nacimiento </label>{{form_widget(form.fechaNac, { 'attr': {'readonly':'readonly'} })}}
+
+            </div>
+
+            <div class="col-md-4">
+                <label><span class="text-danger">*&nbsp;</span> Pais </label>{{form_widget(form.pais, { 'attr': {'class': 'solo-letra'} })}}
+    <br>
+    <br>
+            </div>
+
+            <div class="col-md-6">
+                <label><span class="text-danger">*&nbsp;</span>Telefono</label>{{form_widget(form.telefono , { 'attr': {'class': 'solo-numero'} })}}
+
+            </div>
+
+             <br>
+             <br>
+        </div>
+
+        <div class="box-footer">
+
+       <button type="submit" name="submit" value="saveAndAdd" class="btn btn-info">
+           Guardar y Enviar <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+       </button>
+   </div>
+
+        {{ form_end(form) }}
+
+        <hr/>
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+{% block javascripts_inline %}
+<link rel="stylesheet" href="/bundles/avanzuadmintheme/vendor/adminlte/plugins/datepicker/datepicker3.css" />
+<script src="/bundles/organizaciones/js/validaciones.js"></script>
+<script src="/bundles/avanzuadmintheme/vendor/adminlte/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="/bundles/avanzuadmintheme/vendor/adminlte/plugins/datepicker/locales/bootstrap-datepicker.es.js"></script>
+
+<script>
+    //fecha actual del servidor
+    var fecha = new Date();
+
+    //se restan los 5 años
+    //fecha.setFullYear(fecha.getFullYear() - 5);
+
+    $('#prueba_fechaNac').datepicker({
+        format: "yyyy-mm-dd",
+        endDate: "today",
+        //startDate: fecha.toJSON().slice(0,10), //muestra la fecha en el formato requerido
+        maxViewMode: 3,
+        todayBtn: true,
+        clearBtn: true,
+        language: "es",
+        autoclose: true,
+        orientation: "top right",
+        todayHighlight: true
+    });
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,60 @@
+valoracionoac:
+    path:  /
+    defaults: { _controller: "FgimenezPlanillaBundle:ValoracionOAC:index" }
+
+valoracionoac_show:
+    path:  /{id_valoracion}/show
+    defaults: { _controller: "FgimenezPlanillaBundle:ValoracionOAC:show" }
+
+valoracionoac_new:
+    path:  /{planilla}/new
+    defaults: { _controller: "FgimenezPlanillaBundle:ValoracionOAC:new" }
+
+valoracionoac_create:
+    path:  /create
+    defaults: { _controller: "FgimenezPlanillaBundle:ValoracionOAC:create" }
+    requirements: { _method: post }
+
+valoracionoac_edit:
+    path:  /{id}/edit
+    defaults: { _controller: "FgimenezPlanillaBundle:ValoracionOAC:edit" }
+
+valoracionoac_update:
+    path:  /{id}/update
+    defaults: { _controller: "FgimenezPlanillaBundle:ValoracionOAC:update" }
+    requirements: { _method: post|put }
+
+valoracionoac_delete:
+    path:  /{id}/delete
+    defaults: { _controller: "FgimenezPlanillaBundle:ValoracionOAC:delete" }
+    requirements: { _method: post|delete }
+
+valoracionoac_by_id_delete:
+    path:  /delete/{id}
+    defaults: { _controller: "FgimenezPlanillaBundle:ValoracionOAC:deleteById" }
+    requirements: { _method: get }
+
+
+valoracionoac_bulk_action:
+    path:  /bulk-action
+    defaults: { _controller: "FgimenezPlanillaBundle:ValoracionOAC:bulk" }
+    requirements: { _method: post }
+
+valoracion_competencia_autocompletar:
+    path:  /autocompletar
+    defaults: { _controller: "FgimenezPlanillaBundle:ValoracionOAC:autocompletar" }
+    requirements: { _method: get|post|put }
+
+
+valoracion_valida_referencia:
+    path:  /validaref
+    defaults: { _controller: "FgimenezPlanillaBundle:ValoracionOAC:validaref" }
+    requirements: { _method: get|post|put }
+
+valoracionoac_evaluar:
+    path:  /{id}/evaluar
+    defaults: { _controller: "FgimenezPlanillaBundle:ValoracionOAC:evaluarValoracion" }
+
+valoracion_pdf:
+    path:  /pdfvaloracion/{id}
+    defaults: { _controller: "FgimenezPlanillaBundle:ValoracionOAC:planillaValoracion" }

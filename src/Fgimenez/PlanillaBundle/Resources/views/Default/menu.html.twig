@@ -1,0 +1,143 @@
+
+
+<ul class="sidebar-menu tree" data-widget="tree">
+
+    <li class="treeview active">
+        <a href="#">
+            <i class="fa fa-user" style="color: #FFFFFF"></i>
+            <span style="color: #FFFFFF">Datos Personales</span>
+
+        </a>
+        <ul class="treeview-menu" style="display: none;">
+            <li><a href="{{ path('persona') }}"><span style="font-size: 12px; color: #145d88">
+                        <i class="fa fa-check-circle-o"></i> Datos Personales</span></a></li>
+
+        </ul>
+    </li>
+
+
+    <li class="treeview active">
+        <a href="#">
+            <i class="fa fa-book" style="color: #FFFFFF"></i>
+            <span style="color: #FFFFFF">Casos</span>
+
+        </a>
+        <ul class="treeview-menu" style="display: none;">
+            <li>
+                <a href="{{ path('planilla') }}"><span style="font-size: 12px; color: #145d88">
+                        <i class="fa fa-check-circle-o"></i> Casos</span></a>
+            </li>
+            <li>
+                <a href="{{ path('planilla_index_asignar') }}"><span style="font-size: 12px; color: #145d88">
+                        <i class="fa fa-check-circle-o"></i>Asignar</span></a>
+            </li>
+
+        </ul>
+    </li>
+
+
+
+    <li class="treeview active">
+        <a href="#">
+            <i class="fa fa-sitemap" style="color: #FFFFFF"></i>
+            <span style="color: #FFFFFF">Estruc. Organizacional</span>
+
+        </a>
+        <ul class="treeview-menu" style="display: none;">
+            <li><a href="{{ path('tipo_organizacion') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i> Tipo Organización</span></a></li>
+            <li><a href="{{ path('organizaciones') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i> Organizaciones</span></a></li>
+        </ul>
+    </li>
+
+
+    <li class="treeview active">
+        <a href="#">
+            <i class="fa fa-cogs" style="color: #FFFFFF"></i>
+            <span style="color: #FFFFFF">Mantenimiento</span>
+
+        </a>
+        <ul class="treeview-menu" style="display: none;">
+            {#<li><a href="{{ path('tipocaso') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i>Tipo de Requerimiento</span></a></li>#}
+            <li><a href="{{ path('organizacionespp') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i> Instancias del Poder Popular</span></a></li>
+            <li><a href="{{ path('sindicatos') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i> Sindicatos</span></a></li>
+            <li><a href="{{ path('mecanismo_presentacion') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i> Mecanismo de Presentación</span></a></li>
+            <li><a href="{{ path('servicio_prestado') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i> Servicio Prestado</span></a></li>
+            <li><a href="{{ path('empresa_privada') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i> Empresa Privada</span></a></li>
+            <li><a href="{{ path('referencias_normativas') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i> Referencias Normativas</span></a></li>
+        </ul>
+    </li>
+
+    <li class="treeview active">
+        <a href="#">
+            <i class="fa fa-print" style="color: #FFFFFF"></i>
+            <span style="color: #FFFFFF">Impresiones</span>
+
+        </a>
+        <ul class="treeview-menu" style="display: none;">
+            <li><a href="{{ path('impresiones_constancia') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i> Constancia de Atención</span></a></li>
+            <li><a href="{{ path('impresiones_planilla') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i> Planilla de Requerimiento</span></a></li>
+        </ul>
+    </li>
+
+
+    <li class="treeview active">
+        <a href="#">
+            <i class="fa fa-key" style="color: #FFFFFF"></i>
+            <span style="color: #FFFFFF">Seguridad</span>
+
+        </a>
+        <ul class="treeview-menu" style="display: none;">
+            {#<li><a href="{{ path('usuarios') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i> Usuarios</span></a></li>#}
+            <li><a href="{{ path('fos_user_change_password') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i> Cambiar Contraseña</span></a></li>
+            {#<li><a href="{{ path('group') }}"><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i> Grupos</span></a></li>#}
+
+
+        </ul>
+    </li>
+
+    <li class="treeview active">
+        <a href="#">
+            <i class="fa fa-desktop" style="color: #FFFFFF"></i>
+            <span style="color: #FFFFFF">Sistemas</span>
+
+        </a>
+
+        <ul class="treeview-menu" style="display: none;">
+
+            {% for aplicacion in aplicaciones %}
+                <li><a  onclick="cargar_sistema('{{aplicacion.dominio}}');" ><span style="font-size: 12px; color: #145d88"><i class="fa fa-check-circle-o"></i>{{aplicacion.alias}}</span></a></li>
+                        {% endfor %}
+        </ul>
+
+    </li>
+
+
+</ul>
+
+<form id="datos_log" action="" method="post" >
+
+    <input type="hidden" name="var_user" value="{{app.user.username}}" />
+
+    <input type="hidden" name="acceso" value="1" />
+
+</form>
+
+<script>
+
+    function cargar_sistema(dominio) {
+
+        var $form = $('#datos_log');
+
+        $form.attr('action', dominio);
+
+        $.ajax({
+            url: "{{ path('user_security_salir') }}",
+            method: "post",
+            success: function (html) {
+
+                $("#datos_log").submit();
+
+            }
+        });
+    }
+</script>

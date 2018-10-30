@@ -1,0 +1,119 @@
+
+<div class="box-body col-md-11">
+    <table class="table table-bordered">                    
+        <tr>
+
+            <td class="text-primary col-md-3"><strong>Quien Suscribe</strong></td>
+            <td class="text-primary col-md-3"><strong>Condición</strong></td>
+            <td class="text-primary col-md-2"><strong>Fecha Escrito</strong></td>
+            <td class="text-primary col-md-3"><strong>N&uacute;mero de Oficio</strong></td>
+
+        </tr>                    
+        <tr>
+            <td> 
+                {{ valoracionOAC.nombreQuienSuscribe }}
+            </td>
+            <td> 
+                {{ valoracionOAC.condicionQuienSuscribe }}
+            </td> 
+            <td> 
+                {% if valoracionOAC.fechaEscrito %}{{ valoracionOAC.fechaEscrito|date('Y-m-d H:i:s') }}{% endif %}
+            </td>
+            <td> 
+                {{ valoracionOAC.numeroOficio }}
+            </td> 
+
+        </tr>                    
+
+        <tr>
+            <td class="text-primary" colspan="2"><strong>Ente u Órgano en el que fue presentado</strong></td>
+            <td class="text-primary" colspan="2"><strong>Competencia</strong></td>
+
+
+        </tr>                    
+        <tr>
+            <td colspan="2"> 
+                {%if ente_organo%}
+                    {{ ente_organo.desEnte |title }}
+                {%endif%}
+            </td>
+            <td colspan="2"> 
+                {{ competencia  }}
+            </td>
+        </tr>
+        <tr>
+            <td class="text-primary" colspan="2"><strong>Referencias Normativas</strong></td>
+
+
+
+        </tr>
+    </table>
+</div>
+    <div class="col-md-8">
+        <table id="tabla" class="table table-bordered table-hover">
+            <tr class="info text-primary">
+                <td><strong>Nombre</strong></td>
+                <td><strong>Art&iacute;culo</strong></td>
+                <td><strong>Numeral</strong></td>
+                <td><strong>Literal</strong></td>
+
+            </tr>
+
+
+            {% for referencia in valoracionOAC.ValoracionOACReferenciasNormativas %}
+
+                <tr id="resultado_editar"class="warning">
+                    <td>{{referencia.ReferenciasNormativas.nombre | title}}. Fecha Gaceta:{{referencia.ReferenciasNormativas.fecha|date('d-m-Y')}}</td>
+                    <td>{{referencia.articulo}}</td>
+                    <td>{{referencia.numeral}}</td>
+                    <td>{{referencia.literal}}</td>
+
+
+
+                </tr>    
+            {% endfor%}
+
+
+        </table>
+    </div>
+    <table class="table table-bordered">
+
+        <tr>
+            <td class="text-primary"><strong>Conclusiones y Recomendaciones</strong></td>
+
+        </tr> 
+        <tr>
+
+            <td> 
+                {{ valoracionOAC.observaciones }}
+            </td>               
+        </tr> 
+    </table>
+    <table class="table table-bordered">
+        {%for analista in array_analista%}
+        <tr>
+            <td  class="col-md-3"><strong><span class="text-primary">{{analista['descripcion']}}: </span></strong>{{analista['nombre_analista'] | title}}</td>
+            <td  class="col-md-3"><strong><span class="text-primary">Fecha: </span></strong>{{analista['created'] | date ('d/m/Y h:m:s')}}</td>
+        </tr>
+        {%endfor%}
+        
+        {#<tr>
+            <td class="text-primary" class="col-md-3"><strong>Analista que finalizó la valoración</strong></td>
+            <td class="text-primary" class="col-md-3"><strong>Fecha</strong></td>
+
+        </tr>#}    
+        {#<tr>
+            <td class="col-md-3"> 
+                {{analista |title}}
+            </td> 
+            <td class="col-md-3"> 
+                {{ creacion |date('Y/m/d H:i:s') }}
+            </td>                     
+        </tr>  #}                  
+    </table>
+
+
+
+
+
+

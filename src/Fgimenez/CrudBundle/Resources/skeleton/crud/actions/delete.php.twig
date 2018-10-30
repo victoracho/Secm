@@ -1,0 +1,66 @@
+
+    /**
+     * Deletes a {{ entity }} entity.
+     *
+{% if 'annotation' == format %}
+     * @Route("/{id}", name="{{ route_name_prefix }}_delete")
+     * @Method("DELETE")
+{% endif %}
+     */
+    public function deleteAction(Request $request, {{ entity_class }} ${{ entity_singularized }})
+    {
+    
+        $form = $this->createDeleteForm(${{ entity_singularized }});
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove(${{ entity_singularized }});
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', '{{ entity }} fue eliminado exitosamente');
+        } else {
+            $this->get('session')->getFlashBag()->add('error', 'Ocurrio un problema con {{entity}}');
+        }
+        
+        return $this->redirectToRoute('{{ route_name_prefix }}');
+    }
+    
+    /**
+     * Creates a form to delete a {{ entity }} entity.
+     *
+     * @param {{ entity_class }} ${{ entity_singularized }} The {{ entity }} entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm({{ entity_class }} ${{ entity_singularized }})
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('{{ route_name_prefix }}_delete', array('id' => ${{ entity_singularized }}->getId())))
+            ->setMethod('DELETE')
+            ->getForm()
+        ;
+    }
+    
+    /**
+     * Delete {{ entity_class }} by id
+     *
+{% if 'annotation' == format %}
+     * @Route("/delete/{id}", name="{{ route_name_prefix }}_by_id_delete")
+     * @Method("GET")
+{% endif %}
+     */
+    public function deleteByIdAction({{ entity }} ${{ entity_singularized }}){
+        $em = $this->getDoctrine()->getManager();
+        
+        try {
+            $em->remove(${{ entity_singularized }});
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', '{{ entity }} fue eliminado exitosamente');
+        } catch (Exception $ex) {
+            $this->get('session')->getFlashBag()->add('error', 'Ocurrio un problema con {{entity}}');
+        }
+
+        return $this->redirect($this->generateUrl('{{ route_name_prefix }}'));
+
+    }
+    

@@ -1,0 +1,157 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Editar planilla
+{% endblock %}
+
+{% block page_content %}
+
+
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+
+            <div class="box box-warning">
+                <div class="box-header with-border">
+                    <span class="glyphicon glyphicon-file" aria-hidden="true"></span> <h3 class="box-title">Ver Caso {{planilla.codigo}} </h3>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        {% for type, flashMessages in app.session.flashbag.all() %} 
+                            {% for flashMessage in flashMessages %}
+                                <div class="alert alert-{{ type }}">
+                                    {{ flashMessage|raw }}
+                                </div>
+                            {% endfor %} 
+                        {% endfor %} 
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">           <!-- Custom Tabs -->
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tab_1" data-toggle="tab">Datos B&aacute;sicos</a></li>
+                                <li><a href="#tab_2" data-toggle="tab">Soportes Documentales</a></li>
+                                <li><a href="#tab_3" data-toggle="tab">Datos Requirientes</a></li>
+                                <li><a href="#tab_4" data-toggle="tab">Datos Involucrados</a></li>
+                                    {%if planilla.UltimoStatus.Id>3 and planilla.PlanillaValoracionOAC%}
+                                    <li><a href="#tab_5" data-toggle="tab">Datos Valoración</a></li>
+                                    {%endif%}
+
+                                {#<li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>#}
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1">
+
+                                    {{ render(controller('FgimenezPlanillaBundle:Planilla:showCaso',{ 'id':planilla.id })) }}
+
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_2">
+                                    {{ render(controller('FgimenezDocumentoBundle:DocumentoInterfaz:ver', { 'enlace':{'id': planilla.id,'entidad': 'FgimenezPlanillaBundle:Planilla','ruta': '/documento_soporte/' ~ planilla.codigo } })) }}
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_3">
+                                    {{ render(controller('DatosPersonalesBundle:PersonaInterfaz:ver',{ 'enlace':{'id': planilla.id,'entidad': 'FgimenezPlanillaBundle:Planilla' } })) }}
+                                </div>
+                                <div class="tab-pane" id="tab_4">
+                                    {{ render(controller('jsanchezInvolucradosBundle:InvolucradoInterfaz:visualizar',{ 'id_documento':planilla.id })) }}
+
+                                </div> 
+                                    
+                                {%if planilla.UltimoStatus.Id>3 and planilla.PlanillaValoracionOAC%}
+                                    
+                                    <div class="tab-pane" id="tab_5">
+
+                                        {{ render(controller('FgimenezPlanillaBundle:ValoracionOAC:show',{ 'id':planilla.PlanillaValoracionOAC.Id })) }}
+                                    </div>
+
+                                {%endif%}
+
+                                <!-- /.tab-pane -->
+                            </div>
+                            <!-- /.tab-content -->
+                        </div>
+                        <!-- nav-tabs-custom -->
+                    </div>
+
+                </div>
+
+
+
+                <hr/>
+
+
+                <div class="form-group">
+                    {%if origen=='crear'%}
+                        <a class="btn btn-default" href="{{ path('planilla') }}">
+                            <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                            Volver al listado
+                        </a>
+                    {%endif%}
+                    {%if origen=='asignar'%}
+                        <a class="btn btn-default" href="{{ path('planilla_index_asignar') }}">
+                            <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                            Volver al listado
+                        </a>
+                    {%endif%}
+                    {%if origen=='remitir'%}
+                        <a class="btn btn-default" href="{{ path('planilla_index_remitir') }}">
+                            <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                            Volver al listado
+                        </a>
+                    {%endif%}
+                    
+            
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block stylesheets_inline %}   
+    <link rel="stylesheet" href="{{ asset('bundles/avanzuadmintheme/vendor/adminlte/plugins/datepicker/datepicker3.css') }}" />
+{% endblock %}
+
+
+{% block javascripts_inline %}
+    <script src="{{ asset('bundles/avanzuadmintheme/vendor/adminlte/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('bundles/avanzuadmintheme/vendor/adminlte/plugins/datepicker/locales/bootstrap-datepicker.es.js') }}"></script>
+
+
+    <script>
+
+        $(document).ready(function () {
+
+            //fecha actual del servidor
+            var fecha = new Date();
+
+            //se restan los 5 años
+            fecha.setFullYear(fecha.getFullYear() - 5);
+
+            $('#planilla_fechaHecho').datepicker({
+                format: "yyyy-mm-dd",
+                endDate: "today",
+                startDate: fecha.toJSON().slice(0, 10), //muestra la fecha en el formato requerido
+                maxViewMode: 3,
+                todayBtn: true,
+                clearBtn: true,
+                language: "es",
+                autoclose: true,
+                orientation: "bottom left",
+                todayHighlight: true
+            });
+        });
+
+    </script>
+{% endblock %}

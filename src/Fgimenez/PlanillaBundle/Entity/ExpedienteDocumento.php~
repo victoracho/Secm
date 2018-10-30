@@ -1,0 +1,55 @@
+<?php
+
+namespace Fgimenez\PlanillaBundle\Entity;
+
+use Fgimenez\DocumentoBundle\Entity\Enlace as EnlaceDocumento;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+/**
+ * Catalogo
+ *
+ * @ORM\Entity
+ *
+ */
+class ExpedienteDocumento extends EnlaceDocumento
+{  
+
+
+
+    /**
+     * @var \Fgimenez\PlanillaBundle\Entity\Planilla
+     */
+    private $planilla;
+
+
+    /**
+     * Set planilla
+     *
+     * @param \Fgimenez\PlanillaBundle\Entity\Planilla $planilla
+     *
+     * @return ExpedienteDocumento
+     */
+    public function setPlanilla(\Fgimenez\PlanillaBundle\Entity\Planilla $planilla = null)
+    {
+        $this->planilla = $planilla;
+
+        return $this;
+    }
+
+    /**
+     * Get planilla
+     *
+     * @return \Fgimenez\PlanillaBundle\Entity\Planilla
+     */
+    public function getPlanilla()
+    {
+        return $this->planilla;
+    }   
+    
+    
+    
+    
+    
+}

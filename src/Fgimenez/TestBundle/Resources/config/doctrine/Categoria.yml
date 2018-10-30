@@ -1,0 +1,47 @@
+Fgimenez\TestBundle\Entity\Categoria:
+    type: entity
+    table: test_categoria
+    repositoryClass: Fgimenez\TestBundle\Repository\CategoriaRepository
+    gedmo:
+        translation:
+            locale: locale
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        titulo:
+            type: string
+            length: 255
+            unique: true
+            gedmo:
+                - translatable
+        descripcion:
+            type: text
+            nullable: true
+            gedmo:
+                - translatable
+        imagen:
+            type: string
+            length: 150
+            nullable: true
+            
+        slug:
+            type: string
+            length: 255
+            unique: true
+            constraints:
+                - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:                    
+                      message: 'Existen valores previamente registradosg (únicos)'
+        publicado:
+            type: boolean
+            nullable: true
+
+            
+    oneToMany:
+        noticias:
+            targetEntity: Noticia
+            mappedBy: categoria        
+    lifecycleCallbacks: {  }

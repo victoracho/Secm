@@ -1,0 +1,30 @@
+documentoFront_crear:
+    path:  /crear
+    defaults: { _controller: "FgimenezDocumentoBundle:DocumentoInterfaz:crear" }
+    requirements: { _method: post|put }
+
+documentoFront_eliminar:
+    path:  /{id}/eliminar
+    defaults: { _controller: "FgimenezDocumentoBundle:DocumentoInterfaz:eliminar" }
+    requirements: { _method: post|put }    
+
+documentoFront_consultar:
+    path:  /{id}/consultar
+    defaults: { _controller: "FgimenezDocumentoBundle:DocumentoInterfaz:consultar" }
+    requirements: { _method: get|post|put } 
+    
+#documentoFront_descargar:
+#    path:  /descargar
+#    defaults: { _controller: "FgimenezDocumentoBundle:DocumentoInterfaz:descargar" }
+#    requirements: { _method: post }
+
+documentoFront_descargar:
+    path:  /{id}/descargar
+    defaults: { _controller: "FgimenezDocumentoBundle:DocumentoInterfaz:descargar" }
+    requirements: { _method: get|post|put } 
+    
+    
+documentoFront_modificar:
+    path:  /{id}/modificar
+    defaults: { _controller: "FgimenezDocumentoBundle:DocumentoInterfaz:modificar" }
+    requirements: { _method: post|put }    

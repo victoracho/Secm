@@ -1,0 +1,34 @@
+{% extends 'FgimenezTestBundle::Noticia/frontend/index.html.twig' %}
+{% block partial %}
+    {% for item in noticias %}
+        <div class="blog-item">
+            <div class="row">
+                <div class="col-sm-2 text-center">
+                    <div class="entry-meta"> 
+                        <span id="publish_date">{{ item.fecha | date('d/m/Y') }}</span>
+                        <span><i class="fa fa-user"></i> <a href="#">John Doe</a></span>
+                        <span><i class="fa fa-comment"></i> <a href="blog-item.html#comments">2 Comments</a></span>
+                        <span><i class="fa fa-heart"></i><a href="#">56 Likes</a></span>
+                    </div>
+                </div>
+                <div class="col-sm-10 blog-content">
+                    <a href="{{ path('noticia_front_show', {'slug': item.slug}) }}"><img class="img-responsive img-blog" src="/uploads/test_noticia/{{ item.imagen }}" width="100%" alt="" /></a>
+                    <h2><a href="{{ path('noticia_front_show', {'slug': item.slug}) }}"> {{ item.titulo }}</a></h2>
+                    <h3> {{ item.resumen|raw }}</h3>
+                    <a class="btn btn-primary readmore" href="blog-item.html">Leer más <i class="fa fa-angle-right"></i></a>
+                </div>
+            </div>    
+        </div><!--/.blog-item-->
+    {% endfor %}
+
+    <div class="col-md-10 col-md-offset-2 text-right">    
+
+        {{ pagerHtml|raw }} 
+
+    </div>
+
+
+
+{% endblock %}
+
+

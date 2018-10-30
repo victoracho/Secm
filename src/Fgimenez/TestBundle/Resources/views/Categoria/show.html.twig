@@ -1,0 +1,87 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+{{ parent() }} - categorium
+{% endblock %}
+
+{% block page_content %}
+
+
+
+
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Mostrar categorium <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> </h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table class="table table-bordered">                    <tr>
+                        <td><strong>Id</strong></td>
+                        <td> 
+                                                            {{ categorium.id }}
+                                                    </td>                     
+                    </tr>                    <tr>
+                        <td><strong>Titulo</strong></td>
+                        <td> 
+                                                            {{ categorium.titulo }}
+                                                    </td>                     
+                    </tr>                    <tr>
+                        <td><strong>Descripcion</strong></td>
+                        <td> 
+                                                            {{ categorium.descripcion }}
+                                                    </td>                     
+                    </tr>                    <tr>
+                        <td><strong>Imagen</strong></td>
+                        <td> 
+                                                            {{ categorium.imagen }}
+                                                    </td>                     
+                    </tr>                    <tr>
+                        <td><strong>Slug</strong></td>
+                        <td> 
+                                                            {{ categorium.slug }}
+                                                    </td>                     
+                    </tr>                    <tr>
+                        <td><strong>Publicado</strong></td>
+                        <td> 
+                                                            {% if categorium.publicado %}Yes{% else %}No{% endif %}
+                                                    </td>                     
+                    </tr>                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+
+
+
+<hr/>
+
+
+<div class="form-group">
+    <a class="btn btn-default" href="{{ path('categoria_crud') }}">
+        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+        Volver al listado
+    </a>
+    <a class="btn btn-primary" href="{{ path('categoria_crud_edit', { 'id':  categorium.id }) }}">
+        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+        Editar
+    </a>
+    <a class="btn btn-info" href="{{ path('categoria_crud_new') }}">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        Nuevo
+    </a>
+    <form action="{{ path('categoria_crud_delete', { 'id': categorium.id }) }}" method="post" style="display: inline-block">
+        <input type="hidden" name="_method" value="DELETE" />
+        {{ form_widget(delete_form) }}
+        <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure');">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            Eliminar
+        </button>
+    </form>
+</div>
+
+
+{% endblock %}

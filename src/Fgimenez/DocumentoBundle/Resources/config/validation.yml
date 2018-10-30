@@ -1,0 +1,14 @@
+FgimenezDocumentoBundle\Entity\TipoDocumento:
+    
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: nombre
+       # - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: titulo
+        
+    properties:
+        nombre:
+            - NotBlank: {message: "El nombre no puede estar vacio"}
+            - Length: 
+                min: 2
+                minMessage: "El nombre- debe tener más de 2 caracteres"
+                max: 50
+                maxMessage: "El nombre- debe tener maximo de 50 caracteres"

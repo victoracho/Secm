@@ -1,0 +1,148 @@
+
+    /**
+     * Lists all {{ entity }} entities.
+     *
+{% if 'annotation' == format %}
+     * @Route("/", name="{{ route_name_prefix }}")
+     * @Method("GET")
+{% endif %}
+     */
+    public function indexAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $queryBuilder = $em->getRepository('{{ bundle }}:{{ entity }}')->createQueryBuilder('e');
+        
+{% if filter_type != constant('Petkopara\\CrudGeneratorBundle\\Command\\CrudGeneratorCommand::FILTER_TYPE_NONE') %}
+        list($filterForm, $queryBuilder) = $this->filter($queryBuilder, $request);
+{% endif %}
+        list(${{ entity_pluralized }}, $pagerHtml) = $this->paginator($queryBuilder, $request);
+        
+{% if bundle_views == false%}
+        return $this->render('{{ entity|lower|replace({'\\': '/'}) }}/index.html.twig', array(
+{%else%}
+        return $this->render('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:index.html.twig', array(
+{% endif %}
+            '{{ entity_pluralized }}' => ${{ entity_pluralized }},
+            'pagerHtml' => $pagerHtml,
+{% if filter_type != constant('Petkopara\\CrudGeneratorBundle\\Command\\CrudGeneratorCommand::FILTER_TYPE_NONE') %}
+            'filterForm' => $filterForm->createView(),
+{% endif %}
+
+        ));
+    }
+
+{% if filter_type == constant('Petkopara\\CrudGeneratorBundle\\Command\\CrudGeneratorCommand::FILTER_TYPE_FORM') %}
+    /**
+    * Create filter form and process filter request.
+    *
+    */
+    protected function filter($queryBuilder, Request $request)
+    {
+        $session = $request->getSession();
+        $filterForm = $this->createForm('{{ namespace }}\Form\{{ entity_class }}FilterType');
+
+        // Reset filter
+        if ($request->get('filter_action') == 'reset') {
+            $session->remove('{{ entity }}ControllerFilter');
+        }
+
+        // Filter action
+        if ($request->get('filter_action') == 'filter') {
+            // Bind values from the request
+            $filterForm->handleRequest($request);
+
+            if ($filterForm->isValid()) {
+                // Build the query from the given form object
+                $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($filterForm, $queryBuilder);
+                // Save filter to session
+                $filterData = $filterForm->getData();
+                $session->set('{{ entity }}ControllerFilter', $filterData);
+            }
+        } else {
+            // Get filter from session
+            if ($session->has('{{ entity }}ControllerFilter')) {
+                $filterData = $session->get('{{ entity }}ControllerFilter');
+                
+                foreach ($filterData as $key => $filter) { //fix for entityFilterType that is loaded from session
+                    if (is_object($filter)) {
+                        $filterData[$key] = $queryBuilder->getEntityManager()->merge($filter);
+                    }
+                }
+                
+                $filterForm = $this->createForm('{{ namespace }}\Form\{{ entity_class }}FilterType', $filterData);
+                $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($filterForm, $queryBuilder);
+            }
+        }
+
+        return array($filterForm, $queryBuilder);
+    }
+{% endif %}
+
+{% if filter_type == constant('Petkopara\\CrudGeneratorBundle\\Command\\CrudGeneratorCommand::FILTER_TYPE_INPUT') %}
+    /**
+    * Create filter form and process filter request.
+    *
+    */
+    protected function filter($queryBuilder, $request)
+    {
+        $filterForm = $this->createForm('{{ namespace }}\Form\{{ entity_class }}FilterType');
+
+        // Bind values from the request
+        $filterForm->handleRequest($request);
+
+        if ($filterForm->isValid()) {
+            // Build the query from the given form object
+            $this->get('petkopara_multi_search.builder')->searchForm( $queryBuilder, $filterForm->get('search'));
+        }
+
+        return array($filterForm, $queryBuilder);
+    }
+{% endif %}
+
+    /**
+    * Get results from paginator and get paginator view.
+    *
+    */
+    protected function paginator($queryBuilder, Request $request)
+    {
+        //sorting
+{% if without_sorting == false %}
+        $sortCol = $queryBuilder->getRootAlias().'.'.$request->get('pcg_sort_col', 'id');
+        $queryBuilder->orderBy($sortCol, $request->get('pcg_sort_order', 'desc'));
+{% endif %}
+        // Paginator
+        $adapter = new DoctrineORMAdapter($queryBuilder);
+        $pagerfanta = new Pagerfanta($adapter);
+{% if without_sorting == false %}
+        $pagerfanta->setMaxPerPage($request->get('pcg_show' , 10));
+{% endif %}
+
+        try {
+            $pagerfanta->setCurrentPage($request->get('pcg_page', 1));
+        } catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $ex) {
+            $pagerfanta->setCurrentPage(1);
+        }
+        
+        $entities = $pagerfanta->getCurrentPageResults();
+
+        // Paginator - route generator
+        $me = $this;
+        $routeGenerator = function($page) use ($me, $request)
+        {
+            $requestParams = $request->query->all();
+            $requestParams['pcg_page'] = $page;
+            return $me->generateUrl('{{ route_name_prefix }}', $requestParams);
+        };
+
+        // Paginator - view
+        $view = new TwitterBootstrap3View();
+        $pagerHtml = $view->render($pagerfanta, $routeGenerator, array(
+            'proximity' => 3,
+            'prev_message' => 'previous',
+            'next_message' => 'next',
+        ));
+
+        return array($entities, $pagerHtml);
+    }
+    
+    

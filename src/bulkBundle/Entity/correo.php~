@@ -1,0 +1,84 @@
+<?php
+
+namespace bulkBundle\Entity;
+
+/**
+ * correo
+ */
+class correo
+{
+    /**
+     * @var int
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     */
+    private $fecha;
+
+    /**
+     * @var string
+     */
+    private $fechaEdicion;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return correo
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
+
+    /**
+     * Set fechaEdicion
+     *
+     * @param string $fechaEdicion
+     *
+     * @return correo
+     */
+    public function setFechaEdicion($fechaEdicion)
+    {
+        $this->fechaEdicion = $fechaEdicion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaEdicion
+     *
+     * @return string
+     */
+    public function getFechaEdicion()
+    {
+        return $this->fechaEdicion;
+    }
+}
+

@@ -1,0 +1,23 @@
+FgimenezTestBundle\Entity\Categoria:
+    
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: slug
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: titulo
+        
+    properties:
+        nombre:
+            - NotBlank: {message: "El nombre no puede estar vacio"}
+            - Length: 
+                min: 2
+                minMessage: "El titulo- debe tener más de 2 caracteres"
+                max: 50
+                maxMessage: "El titulo- debe tener maximo de 50 caracteres"
+        
+        imagen:
+            - Image:
+                minWidth: 200
+                maxWidth: 400
+                minHeight: 200
+                maxHeight: "1024k"
+                mimeTypes: [image/jpeg, image/png]
+                mimeTypesMessage: Por favor suba un archivo valido (png / jpg) 

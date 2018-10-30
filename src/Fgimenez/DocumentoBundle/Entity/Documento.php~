@@ -1,0 +1,348 @@
+<?php
+
+namespace Fgimenez\DocumentoBundle\Entity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Timestampable;
+/**
+ * Documento
+ *
+ * @ORM\Entity
+ *
+ */
+class Documento
+{
+    /**
+     * @var int
+     */
+    private $id;
+
+    /**
+     * @var int
+     */
+    private $idTipoDocumento;
+
+    /**
+     * @var int
+     */
+    private $idForaneo;
+
+    /**
+     * @var string
+     *
+     * @Assert\File(
+     *     maxSize = "10240k",
+     *     mimeTypes = {"application/pdf", "application/x-pdf", "application/x-pdf","image/jpeg", "image/png"},
+     *     mimeTypesMessage = "Solo archivos PDF, JPG de maximo 10M"
+     * )
+     */
+    private $ruta;
+
+    /**
+     * @var string
+     * @Assert\NotBlank(
+     *      message = "El resumen no debe estar en blanco"
+     * )
+     */
+    private $resumen;
+
+    /**
+     * @var bool
+     */
+    private $status;
+
+    /**
+     * @var string
+     */
+    private $acceso;
+    
+
+    
+    
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set idTipoDocumento
+     *
+     * @param integer $idTipoDocumento
+     *
+     * @return Documento
+     */
+    public function setIdTipoDocumento($idTipoDocumento)
+    {
+        $this->idTipoDocumento = $idTipoDocumento;
+
+        return $this;
+    }
+
+    /**
+     * Get idTipoDocumento
+     *
+     * @return int
+     */
+    public function getIdTipoDocumento()
+    {
+        return $this->idTipoDocumento;
+    }
+
+    /**
+     * Set idForaneo
+     *
+     * @param integer $idForaneo
+     *
+     * @return Documento
+     */
+    public function setIdForaneo($idForaneo)
+    {
+        $this->idForaneo = $idForaneo;
+
+        return $this;
+    }
+
+    /**
+     * Get idForaneo
+     *
+     * @return int
+     */
+    public function getIdForaneo()
+    {
+        return $this->idForaneo;
+    }
+
+    /**
+     * Set ruta
+     *
+     * @param string $ruta
+     *
+     * @return Documento
+     */
+    public function setRuta($ruta)
+    {
+        $this->ruta = $ruta;
+
+        return $this;
+    }
+
+    /**
+     * Get ruta
+     *
+     * @return string
+     */
+    public function getRuta()
+    {
+        return $this->ruta;
+    }
+
+    /**
+     * Set resumen
+     *
+     * @param string $resumen
+     *
+     * @return Documento
+     */
+    public function setResumen($resumen)
+    {
+        $this->resumen = $resumen;
+
+        return $this;
+    }
+
+    /**
+     * Get resumen
+     *
+     * @return string
+     */
+    public function getResumen()
+    {
+        return $this->resumen;
+    }
+
+    /**
+     * Set status
+     *
+     * @param boolean $status
+     *
+     * @return Documento
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return bool
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set acceso
+     *
+     * @param string $acceso
+     *
+     * @return Documento
+     */
+    public function setAcceso($acceso)
+    {
+        $this->acceso = $acceso;
+
+        return $this;
+    }
+
+    /**
+     * Get acceso
+     *
+     * @return string
+     */
+    public function getAcceso()
+    {
+        return $this->acceso;
+    }
+    /**
+     * @var \Fgimenez\DocumentoBundle\Entity\TipoDocumento
+     */
+    private $tipo_documento;
+
+
+    /**
+     * Set tipoDocumento
+     *
+     * @param \Fgimenez\DocumentoBundle\Entity\TipoDocumento $tipoDocumento
+     *
+     * @return Documento
+     */
+    public function setTipoDocumento(\Fgimenez\DocumentoBundle\Entity\TipoDocumento $tipoDocumento = null)
+    {
+        $this->tipo_documento = $tipoDocumento;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoDocumento
+     *
+     * @return \Fgimenez\DocumentoBundle\Entity\TipoDocumento
+     */
+    public function getTipoDocumento()
+    {
+        return $this->tipo_documento;
+    } 
+
+
+    /**
+     * @var string
+     */
+    private $hash;
+
+
+    /**
+     * Set hash
+     *
+     * @param string $hash
+     *
+     * @return Documento
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * Get hash
+     *
+     * @return string
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
+    
+    
+    /**
+     * @var string
+     */
+    private $nombre;
+
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     *
+     * @return Documento
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+    /**
+     * @var string
+     */
+    private $usuarioCreacion;
+
+    /**
+     * @var \DateTime $fechaCreacion
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    private $fechaCreacion;
+ 
+
+    /**
+     * Set fechaCreacion
+     *
+     * @param \DateTime $fechaCreacion
+     *
+     * @return Documento
+     */
+    public function setFechaCreacion($fechaCreacion)
+    {
+        $this->fechaCreacion = $fechaCreacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCreacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaCreacion()
+    {
+        return $this->fechaCreacion;
+    }
+    
+}

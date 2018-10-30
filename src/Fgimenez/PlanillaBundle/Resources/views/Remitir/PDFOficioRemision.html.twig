@@ -1,0 +1,107 @@
+<html>
+    <head>
+        {% block stylesheets %}
+            <link href="{{ asset('bundles/reporte/css/bundleReporte.css') }}" type="text/css" rel="stylesheet" />
+        {% endblock %}
+    </head>
+    <body>
+        {% block page_content %}
+
+
+            <table style="border: 1px solid #fff;">
+                <tr>
+                    <td style="border: 1px solid #fff;" align="center" ><span><img width="45px"src="{{ asset('bundles/organizaciones/img/logoEscudoVnzla.jpg') }}" /></span></td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #fff;" align="center"><span class="medium"><strong>REPÚBLICA BOLIVARIANA DE VENEZUELA<br>CONTRALORÍA GENERAL DE LA REPÚBLICA<br>DIRECCION DE ATENCIÓN AL CIUDADANO<br>Y CONTROL SOLCIAL</strong> </span></td>
+                </tr>
+
+            </table>
+            <table style="border: 1px solid #fff;" >
+                <tr aling="left">
+                    <td colspan="2"  style="border: 1px solid #fff;" class="medium"></td>
+
+                </tr>
+                <tr aling="left">
+                    <td  style="border: 1px solid #fff; " class="medium"></td>
+                    <td  style="border: 1px solid #fff;" class="large"> O F I C I O &nbsp;&nbsp;&nbsp;&nbsp;N° 01-10-{{planilla.PlanillaValoracionOAC.oficioRemision}}</td>
+                </tr>
+            </table>
+            <table style="border: 1px solid #fff;" >
+                
+                <tr aling="left">
+                    <td  style="border: 1px solid #fff; " class="large-7">Ciudadano:&nbsp;<strong>{{enlace.CiudadanoEnlace | title}}</strong><br>{{enlace.Cargo | title}}&nbsp;{{competencia|title}}
+                        <br>Teléfono: {{enlace.telefono}}
+                        <br>{{enlace.direccion | title}}
+                        <br>Parroquia {{array_edo_mun_pquia['parroquia'] | title}}
+                        <br>Municipio {{array_edo_mun_pquia['municipio'] | title}}
+                        <br>{{enlace.ciudad | title}}-{{array_edo_mun_pquia['estado'] | title}}
+                        <br><strong>ZP</strong> {{enlace.zonaPostal}}
+                    </td>
+                    <td  style="border: 1px solid #fff;" class="medium"></td>
+                </tr>
+                <tr aling="center">
+                    <td  style="border: 1px solid #fff; " class="medium"></td>
+                    <td  style="border: 1px solid #fff;" class="large"> <strong>Fecha:</strong> {{"now"|date('d/m/Y ')}}</td>
+
+                </tr>
+            </table>
+            <br/>
+            <br/>
+            <br/>
+            <table style="border: 1px solid #fff;">
+                <tr>
+                    <td style="border: 1px solid #fff;" align="justify" >
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Me dirijo a usted, a fin de remitir escrito relacionado con el caso {{planilla.Codigo}}, realizado por el ciudadano {% for solicitantes in planilla.solicitantes | slice (0,1)%}{{ solicitantes.persona.primerApellido }} {{ solicitantes.persona.segundoApellido}} {{ solicitantes.persona.primerNombre}} {{ solicitantes.persona.segundoNombre  }}, de nacionalidad {%if solicitantes.persona.nacionalidad=='V'%}venezolana{%else%}extranjero{%endif%}, mayor de edad, titular de la cédula de identidad N° {{ solicitantes.persona.nacionalidad | upper }}-{{ solicitantes.persona.cedula }}, domiciliada en la parroquia {{ solicitantes.persona.direccion.parroquia |title}} del municipio {{ solicitantes.persona.direccion.municipio |title}} en el estado {{ solicitantes.persona.direccion.estado |title}} {%endfor%}. 
+
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #fff;" align="justify" >
+
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Al respecto, hacemos de su conocimiento que, una vez analizado el planteamiento formulado por la ciudadana arriba identificada, se determinó que no se encuentra dentro de las funciones que le son atribuidas por ley a la Contraloría General de la República, sin embargo encuadran dentro de las competencias ejercidas por la institución que usted representa.
+
+                        Sin otro particular a que hacer referencia, se despide.
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #fff;" align="justify" >
+
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sin otro particular a que hacer referencia, se despide.
+                    </td>
+                </tr>
+
+            </table>
+            <table style="border: 1px solid #fff;">
+                <tr>
+                    <td style="border: 1px solid #fff;" align="justify" > </td>
+                </tr>
+                 <tr>
+                    <td style="border: 1px solid #fff;" align="center" > Atentamente</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #fff;" align="center"> </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #fff;" align="center"> </td>
+                </tr>
+                
+                <tr>
+                    <td style="border: 1px solid #fff;" align="center" > <strong>VIVIANA PERAZA</strong><br>
+                        Directora de Atención al Ciudadano y Control Social<br>
+                        Resolución N° 01-00-000461 de fecha 08/08/2017<br>
+Gaceta Oficial N° 41211 de fecha 10/08/2017</td>
+                </tr>
+            </table>
+
+
+
+
+
+            {% endblock %}
+    </body>
+</html>

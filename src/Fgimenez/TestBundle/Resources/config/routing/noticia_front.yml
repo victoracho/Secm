@@ -1,0 +1,8 @@
+noticia_front:
+    path:  /
+    defaults: { _controller: "FgimenezTestBundle:NoticiaFront:noticias" }
+    
+noticia_front_show:
+    path:  /show/{slug}
+    defaults: { _controller: "FgimenezTestBundle:NoticiaFront:show" }  
+   

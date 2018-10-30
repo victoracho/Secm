@@ -1,0 +1,395 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Nuevo Remisión
+{% endblock %}
+
+{% block page_content %}
+
+
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-9">
+
+
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    {%if origen=='remitir_caso'%}
+                        <h3 class="box-title">Generar nota para remitir caso {{valoracion.ValoracionOACPlanilla.codigo}}&nbsp;<span class="glyphicon glyphicon-file" aria-hidden="true"></span> </h3>
+                    {%endif%}
+                    {%if origen=='generar_nota'%}
+                        <h3 class="box-title">Generar nota de remisión adicional al caso {{valoracion.ValoracionOACPlanilla.codigo}}&nbsp;<span class="glyphicon glyphicon-file" aria-hidden="true"></span> </h3>
+                    {%endif%}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        {% for type, flashMessages in app.session.flashbag.all() %} 
+                            {% for flashMessage in flashMessages %}
+                                <div class="alert alert-{{ type }}">
+                                    {{ flashMessage|raw }}
+                                </div>
+                            {% endfor %} 
+                        {% endfor %} 
+                    </div>
+                </div>
+
+
+
+
+                {{ form_start(form) }}
+                <div class="box-body">
+                    {#{{ form_widget(form) }}#}
+
+                    <div class="row">
+                        <div class="col-md-10"><label><span class="text-danger">*&nbsp;</span>Nro. Oficio Remisión</label>{{form_widget(form.oficio_remision, { 'attr': {'required': 'required'} } )}}</div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-10"><label><span class="text-danger">*&nbsp;</span>Asunto Remisi&oacute;n</label>{{form_widget(form.asuntoRemision, { 'attr': {'class': 'solo-letras-signos'} } )}}</div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+
+                        <div class="col-md-10"><label>Observaci&oacute;n Remisión</label>{{form_widget(form.observacion_remision, { 'attr': {'class': 'solo-letras-signos'} } )}}</div>
+                    </div>
+                    <br>
+                    <div class="row">
+
+                        <div class="col-md-10"><label><span class="text-danger">*&nbsp;</span>Instruciones</label>{{form_widget(form.instrucciones)}}</div>
+                    </div>
+
+                </div>
+                <div class="box-footer">
+                    <button type="submit" name="submit" id="submit" value="guardar"  class="btn btn-success" onclick="return confirm('¿Está seguro que desea guardar los cambios en la nota de remisión?');"> 
+                        Guardar Cambios<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                    </button>
+                    {%if origen=='remitir_caso'%}
+                        <button type="submit" name="submit" id="submit" value="remitir_caso" onclick="return confirm('¿Está seguro que desea remitir el caso?');" class="btn btn-info"> 
+                            Remitir Caso<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                        </button>
+                    {%endif%}
+                    {%if origen=='generar_nota'%}
+                        <button type="submit" name="submit" id="submit" value="generar_nota" onclick="return confirm('¿Está seguro que desea generar nota de remisión?');" class="btn btn-info"> 
+                            Generar Nota de Remisión<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                        </button>
+                    {%endif%}
+                </div>
+
+
+                {{ form_end(form) }}
+
+                <hr/>
+
+                <div class="form-group">
+                    <a class="btn btn-default" href="{{ path('planilla_index_remitir') }}">
+                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                        Volver al listado
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block stylesheets_inline %}
+
+    <link rel="stylesheet" href="{{ asset('bundles/avanzuadmintheme/vendor/adminlte/plugins/datepicker/datepicker3.css') }}" />
+{% endblock %}
+{% block javascripts_inline %}
+    <script src="{{ asset('bundles/avanzuadmintheme/vendor/adminlte/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('bundles/avanzuadmintheme/vendor/adminlte/plugins/datepicker/locales/bootstrap-datepicker.es.js') }}"></script>        
+
+    <script>
+                        //fecha actual del servidor
+                        var fecha = new Date();
+
+                        //se restan los 5 años
+                        //fecha.setFullYear(fecha.getFullYear() - 5);
+
+                        $('#valoracion_oac_fechaEscrito').datepicker({
+                            format: "yyyy-mm-dd",
+                            endDate: "today",
+                            //startDate: fecha.toJSON().slice(0,10), //muestra la fecha en el formato requerido
+                            maxViewMode: 3,
+                            //todayBtn: true,
+                            clearBtn: true,
+                            language: "es",
+                            autoclose: true,
+                            //orientation: "bottom left",
+                            todayHighlight: true
+                        });
+
+
+    </script>
+    <script src="/bundles/organizaciones/js/validaciones.js"></script>
+    <script src="/bundles/jsanchezinvolucrados/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <script src="/bundles/jsanchezinvolucrados/EasyAutocomplete-1.3.5/jquery.easy-autocomplete.min.js"></script>
+    <script type="text/javascript">
+
+                        $(document).ready(function () {
+
+                            // cada vez que el usuario cambie el pais en el select
+                            $('#valoracion_oac_competencia').change(function () {
+
+                                if ($('#valoracion_oac_competencia').val() == 0) {
+
+                                    $("#valoracion_oac_organismoCompetencia").val("");
+
+                                    $("#id_detalle_competencia").val("");
+
+                                    $("#valoracion_oac_organismoCompetencia").prop('disabled', true);
+
+                                    $("#titulo").text('');
+
+                                }
+
+                                if ($('#valoracion_oac_competencia').val() == 1) {
+
+                                    $("#valoracion_oac_organismoCompetencia").val("");
+
+                                    $("#id_detalle_competencia").val("");
+
+                                    $("#valoracion_oac_organismoCompetencia").prop('disabled', false);
+
+                                    $("#titulo").text('Dirección General');
+
+                                }
+
+                                if ($('#valoracion_oac_competencia').val() == 2) {
+
+                                    $("#valoracion_oac_organismoCompetencia").val("");
+
+                                    $("#id_detalle_competencia").val("");
+
+                                    $("#valoracion_oac_organismoCompetencia").prop('disabled', false);
+
+                                    $("#titulo").text('Ente u Órgano');
+
+                                }
+
+
+                            });
+                        });
+
+                        function agregarNormativa(origen) {
+
+                            if ($('#valoracion_oac_articulo').val() == "") {
+
+                                $('#div_error').show();
+
+                                $('#mostrar_error').text("Debe indicar al menos el artículo. Verifique");
+
+                                return false;
+
+                            }
+
+                            $('#div_error').hide();
+
+                            var referencia_entrada = $('#valoracion_oac_referenciaNormativa').val();
+
+                            var articulo_entrada = $('#valoracion_oac_articulo').val();
+
+                            var numeral_entrada = $('#valoracion_oac_numeral').val();
+
+                            var literal_entrada = $('#valoracion_oac_literal').val();
+
+                            var existe = 'no';
+
+                            var fila = $('#tabla tr');
+
+                            var tabla_referencia = $('#tabla');
+
+                            var tr_nuevo = "resultado";
+
+
+                            //condicion para saber cual tabla manipular
+
+                            //alert($('#valoracion_oac_referenciaNormativa').val());
+
+
+                            /* fila = ;
+                             tabla_responsable = ;
+                             tr_nuevo = "resultado";*/
+
+                            //recorrer la tabla dinamica
+
+                            fila.each(function () {
+
+                                var referencia = $(this).find("td").eq(0).html();
+
+                                var articulo = $(this).find("td").eq(1).html();
+
+                                var numeral = $(this).find("td").eq(2).html();
+
+                                var literal = $(this).find("td").eq(3).html();
+
+                                if ((referencia == referencia_entrada) && (articulo == articulo_entrada) && (numeral == numeral_entrada) && (literal == literal_entrada)) {
+
+                                    existe = 'si';
+
+                                }
+                            });
+
+                            if (existe == 'si') {
+
+                                $('#div_error').show();
+
+                                $('#mostrar_error').text("La referencia Normativa ya se encuentra registrado. Verifique")
+
+
+                            } else {
+
+
+
+                                var valores = $('#id_referencia').val() + '#' + $('#valoracion_oac_articulo').val() + '#' + $('#valoracion_oac_numeral').val() + '#' + $('#valoracion_oac_literal').val();
+
+                                var nuevaFila = '<tr id="' + tr_nuevo + '" class="warning">';
+
+                                nuevaFila += '<td>' + $('#valoracion_oac_referenciaNormativa').val() + '</td>';
+
+                                nuevaFila += '<td>' + $('#valoracion_oac_articulo').val() + '</td>';
+
+                                nuevaFila += '<td>' + $('#valoracion_oac_numeral').val() + '</td>';
+
+                                nuevaFila += '<td>' + $('#valoracion_oac_literal').val() + '</td>';
+
+                                nuevaFila += '<td><input type="hidden" name="valores[]" value="' + valores + '">';
+
+                                nuevaFila += '<a class="borrar_fila_nuevo btn btn-danger btn-sm" title="Eliminar" >';
+
+                                nuevaFila += '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>'
+
+                                nuevaFila += '</td>';
+
+                                nuevaFila += '</tr>';
+
+                                tabla_referencia.append(nuevaFila);
+
+
+                            }
+
+                        }
+
+                        $(document).on('click', '.borrar_fila_nuevo', function (event) {
+                            event.preventDefault();
+                            $(this).closest('tr').remove();
+                            alert('Normativa Eliminada');
+                        });
+
+                        //funcion autocompletar ente
+
+                        var options = {
+                            url: function (valor) {
+
+                                //return "/Casos/valoracionoac/autocompletar?valor=" + valor + "&campo=ente" +"&format=json";
+
+                                return "/involucrados/front/lista_ente?valor=" + valor + "&format=json";
+
+                            },
+                            getValue: "des_ente", //campo que quiero mostrar
+
+                            list: {
+                                onClickEvent: function () {
+
+                                    var value = $("#valoracion_oac_enteOrgano").getSelectedItemData().id_ente;
+
+                                    $("#id_ente").val(value).trigger("change");
+
+                                }
+
+
+                            },
+                        };
+
+                        $("#valoracion_oac_enteOrgano").easyAutocomplete(options);
+
+                        //funcion autocompletar organo competente
+
+                        var options2 = {
+                            url: function (valor) {
+
+
+                                var id_compete = $("#valoracion_oac_competencia").val();
+
+                                //return "app_dev.php/Casos/valoracionoac/lista_competencia?valor=" + valor + "&competencia="+id_compete+"&format=json";
+
+                                return "/Casos/valoracionoac/autocompletar?valor=" + valor + "&competencia=" + id_compete + "&campo=competencia" + "&format=json";
+
+                            },
+                            getValue: "nombre", //campo que quiero mostrar
+
+                            list: {
+                                onClickEvent: function () {
+
+                                    var value = $("#valoracion_oac_organismoCompetencia").getSelectedItemData().id;
+
+                                    $("#id_detalle_competencia").val(value).trigger("change");
+
+                                }
+
+
+                            },
+                        };
+
+                        $("#valoracion_oac_organismoCompetencia").easyAutocomplete(options2);
+
+                        //funcion autocompletar referencia normativa
+
+                        var options3 = {
+                            url: function (valor) {
+
+                                //return "app_dev.php/Casos/valoracionoac/lista_competencia?valor=" + valor + "&competencia="+id_compete+"&format=json";
+
+                                return "/Casos/valoracionoac/autocompletar?valor=" + valor + "&campo=referencia" + "&format=json";
+
+                            },
+                            getValue: "nombre", //campo que quiero mostrar
+
+                            list: {
+                                onClickEvent: function () {
+
+                                    var value = $("#valoracion_oac_referenciaNormativa").getSelectedItemData().id;
+
+                                    $("#id_referencia").val(value).trigger("change");
+
+                                }
+
+
+                            },
+                        };
+
+                        $("#valoracion_oac_referenciaNormativa").easyAutocomplete(options3);
+
+
+                        /*function validar_formulario(){
+                         
+                         alert($('#valores[]').val());
+                         
+                         
+                         if($('#valores').val()==""){
+                         
+                         
+                         
+                         $('#div_error').show();
+                         
+                         $('#mostrar_error').text("Debe indicar al menos una referencia normativa");
+                         
+                         return false;
+                         
+                         }
+                         
+                         //document.forms["valoracion_oac"].submit();
+                         
+                         
+                         }*/
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+Fgimenez\PlanillaBundle\Entity\ValoracionReferenciasNormativas:
+    type: entity
+    table: oac.valoracion_oac_referencias_normativas
+    repositoryClass: Fgimenez\PlanillaBundle\Repository\ValoracionReferenciasNormativasRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+            
+    fields:
+        idValoracion:
+            type: integer
+            column: id_valoracion
+        idReferenciasNormativas:
+            type: integer
+            column: id_referencias_normativas
+        articulo:
+            type: integer
+        numeral:
+            type: string
+            length: '10'
+            nullable: true
+        literal:
+            type: string
+            length: '10'
+            nullable: true
+            
+    manyToOne:
+        valoracionOAC:
+            targetEntity: ValoracionOAC
+            inversedBy: valoracionOAC_referenciasNormativas            
+            joinColumn:
+                name: id_valoracion
+                referencedColumnName: id
+                
+        referenciasNormativas:
+            targetEntity: \Mmartin4\MantenimientoBundle\Entity\Referencias_Normativas
+            inversedBy: referenciasNormativas_valoracionOAC            
+            joinColumn:
+                name: id_referencias_normativas
+                referencedColumnName: id

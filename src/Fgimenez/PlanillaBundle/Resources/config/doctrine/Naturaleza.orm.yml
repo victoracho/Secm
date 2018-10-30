@@ -1,0 +1,20 @@
+Fgimenez\PlanillaBundle\Entity\Naturaleza:
+    type: entity
+    table: generico.naturaleza
+    repositoryClass: Fgimenez\PlanillaBundle\Repository\NaruralezaRepository
+
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        nombre:
+            type: string
+            length: 255
+            unique: true
+        tipoRequerimiento:
+            type: integer
+            nullable: true
+            column: tipo_requerimiento

@@ -1,0 +1,81 @@
+{#% extends app.request.isXmlHttpRequest ? "MDWDemoBundle::layout_ajax.html.twig" : "MDWDemoBundle::layout.html.twig" %#}
+
+<div class="row">
+    <div class="col-md-12">
+        {% for type, flashMessages in app.session.flashbag.all() %} 
+            {% for flashMessage in flashMessages %}
+                <div class="alert alert-{{ type }}">
+                    {{ flashMessage|raw }}
+                </div>
+            {% endfor %} 
+        {% endfor %} 
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="table-responsive col-md-12">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Listado de Soportes Documentales</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+
+                            {#{% import "PetkoparaCrudGeneratorBundle::macros/th_sortable.html.twig" as macros %}
+
+                            <th>{{macros.th_sortable('idTipoDocumento',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'documento_crud')}}</th>
+                            <th>{{macros.th_sortable('resumen',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'documento_crud')}}</th>
+
+                            <th>{{macros.th_sortable('status',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'documento_crud')}}</th>#}
+                            <th  class="text-primary">N&uacute;mero</th>
+                            <th  class="text-primary">Tipo de Soporte</th>
+                            <th  class="text-primary">Nombre</th>
+                            <th  class="text-primary">Resumen</th>
+                            <th >Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for documento in objeto.documentos %}
+                            <tr>
+                                 <td>{{ objeto.codigo }} # {{ loop.index }}</td>
+                                <td> {{ documento.TipoDocumento.nombre }}</td>
+                                <td> {{ documento.Nombre | title }}</td>
+                                <td>{{ documento.resumen |title | raw }}</td>
+
+                                {#<td>{%- if documento.status %}Si{% else %}No{% endif %}</td>#}
+
+                                <td class="actions">
+                                    <a title='Eliminar' onclick="if (confirm('Esta seguro?')) {
+                                                eliminarDocumento({{ enlace.id }}, '{{ enlace.entidad }}', '{{path('documentoFront_eliminar', { 'id': documento.id })}}')
+                                            }
+                                            ;" class="btn btn-danger btn-sm" href="#">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    </a>
+
+                                    {%- if documento.TipoDocumento.nombre != 'Soporte Físico' %}
+                                    <a title='Descargar' class="btn btn-info btn-sm" href="{{path('documentoFront_descargar', { 'id': documento.id })}}">
+                                        <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+                                    </a>
+                                    {% endif %}
+
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+
+            </div>   

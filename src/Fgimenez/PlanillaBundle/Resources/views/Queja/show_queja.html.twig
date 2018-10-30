@@ -1,0 +1,99 @@
+<div class="box-body col-md-12">
+    <table class="table table-bordered">                   
+
+        <tr>
+            <td class="text-primary"><strong>N&uacute;mero de Caso</strong></td>
+
+            <td class="text-primary"><strong>Tipo de Requerimiento</strong></td>
+
+            <td class="text-primary"><strong>Mecanismo de Presentaci&oacute;n</strong></td>
+        </tr>
+        <tr>
+
+            <td> {{ planilla.codigo }} </td>
+
+            <td> {{ planilla.TipoCaso.nombre }} </td>
+
+            <td> {{ planilla.TipoAtencion.nombre }}</td>
+
+
+
+        </tr>
+        <tr>
+            <td class="text-primary"><strong>Fecha hecho</strong></td>
+
+            <td class="text-primary"><strong>Naturaleza de la Queja</strong></td>
+
+            <td class="text-primary"><strong>Condici&oacute;n de la Queja</strong></td>
+        </tr>
+        <tr>
+            <td>
+                {% if planilla.fechaHecho %}{{ planilla.fechaHecho|date('Y-m-d') }}{% endif %}
+            </td>
+            <td> {{ planilla.Naturaleza.nombre |title}} </td>
+
+            <td> {{ planilla.Condicion.nombre |title}}</td>
+        </tr>
+
+
+        <tr><td class="text-primary" colspan="3"><strong>Lugar del Hecho</strong></td></tr>
+        <tr>
+            <td class="text-primary" ><strong>Estado</strong></td>
+
+            <td class="text-primary" ><strong>Municipio</strong></td>
+
+            <td class="text-primary" ><strong>Parroquia</strong></td>
+
+        </tr>
+        <tr>
+            <td> {{ planilla.adicionales.estado | title }} </td>
+
+            <td> {{ planilla.adicionales.municipio | title }} </td>
+
+            <td> {{ planilla.adicionales.parroquia | title}}</td>
+
+        </tr>
+
+    </table>
+
+</div>
+<div class="box-body col-md-12">
+    <table class="table table-bordered">                   
+        <tr>
+            <td class="text-primary"><strong>Hecho</strong></td>
+
+        </tr> 
+        <tr>
+            <td class="text-left">
+                {{ planilla.hecho | raw }}
+            </td>
+        </tr> 
+    </table>
+    <br>
+    <table class="table table-bordered table-hover">                   
+        <tr>
+            <td colspan="2">
+                <strong class="text-primary" >Analista Receptor:</strong> {{ usuarioCreacion.nombre1 |title }} {{ usuarioCreacion.nombre2 |title}} {{ usuarioCreacion.apellido1 |title}} {{ usuarioCreacion.apellido2 |title}}
+            </td>
+            <td>
+                <strong class="text-primary" >Fecha Creación:</strong> {% if planilla.created %}{{ planilla.created|date('d/m/Y g:ia') }}{% endif %}
+            </td>
+
+        </tr>
+        {%if  usuarioModificacion%}
+            <tr>
+                <td colspan="2">
+                    <strong class="text-primary" >Analista Modificación:</strong> {{ usuarioModificacion.nombre1 |title }} {{ usuarioModificacion.nombre2|title }} {{ usuarioModificacion.apellido1|title }} {{ usuarioModificacion.apellido2 |title}}
+                </td>
+
+
+                <td>
+                    <strong class="text-primary" >Fecha Modificación:</strong> {% if planilla.updated %}{{ planilla.updated|date('d/m/Y g:ia') }}{% endif %}
+                </td>
+
+
+            </tr> 
+        {%endif%}
+    </table>
+
+</div>

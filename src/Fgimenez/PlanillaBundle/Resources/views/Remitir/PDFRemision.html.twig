@@ -1,0 +1,143 @@
+<html>
+    <head>
+        {% block stylesheets %}
+            <link href="{{ asset('bundles/reporte/css/bundleReporte.css') }}" type="text/css" rel="stylesheet" />
+        {% endblock %}
+    </head>
+    <body>
+        {% block page_content %}
+
+            <table style="border: 1px solid #fff;" >
+                <tr>
+                    <td style="border: 1px solid #fff;" align="left" ><span class="small"><strong>C.G.R</strong> </span></td>
+
+                </tr>
+            </table>
+            <table style="border-top: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #fff;">
+                <tr>
+                    <td style="border-top: 1px solid #fff; border-left: 1px solid #fff;" align="center" width="60%"><span class="large"><strong>NOTA DE REMISIÓN<br></strong> </span></td>
+                    <td style="border-top: 1px solid #fff;" align="left"  width="20%"><span class="MEDIUM"><strong>1.N&Uacute;MERO </strong><br/><br>01-10-{{planilla.PlanillaValoracionOAC.oficioRemision}}</span></td>
+                    <td style="border-top: 1px solid #fff; border-right: 1px solid #fff;" align="left" width="20%"><span class="MEDIUM"><strong>2. FECHA</strong><br/><br>{{ "now" |date('d-m-Y') }}</span></td>
+
+                </tr>
+
+
+            </table>
+            <table style="border-left: 1px solid #fff; border-right: 1px solid #fff;" >
+                <tr aling="left">
+                    <td  style="border-left: 1px solid #fff; border-right: 1px solid #fff;" class="medium"> <strong>3. PARA:</strong><br>{{competencia}}</td>
+
+                </tr>
+                <tr aling="left">
+                    <td  style="border-left: 1px solid #fff; border-right: 1px solid #fff;" class="medium"> <strong>4. DE:</strong><br>DIRECCIÓN DE ATENCIÓN AL CIUDADANO Y CONTROL SOCIAL</td>
+
+                </tr>
+                <tr aling="left">
+                    <td style="border-left: 1px solid #fff; border-right: 1px solid #fff;" class="medium"> <strong>5. ASUNTO:</strong><br>{{planilla.PlanillaValoracionOAC.asuntoRemision}}<br></td>
+
+                </tr>
+
+
+            </table>
+
+            <table  style="border-left: 1px solid #fff; border-right: 1px solid #fff; border-top: 1px solid #fff;">
+
+                <tr >
+                    <td colspan="3" style="border-top: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #fff;" align="center" ><span class="medium"><strong>6. INSTRUCCIONES</strong> </span></td>
+
+                </tr>
+                <tr aling="left" class="medium">
+                    <td style="border-bottom: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #fff;" >
+                        {%if array_instrucciones.1==1%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" checked="checked">PARA SU APROBACIÓN
+                       {%else%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" >PARA SU APROBACIÓN
+                       {%endif%}
+                    </td>
+                    <td style="border-bottom: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #fff;"  >
+                        {%if array_instrucciones.4==1%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" checked="checked">ESTUDIO O REVISIÓN
+                       {%else%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" >ESTUDIO O REVISIÓN
+                       {%endif%}
+                    </td>
+                    <td style="border-bottom: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #fff;"  >
+                        {%if array_instrucciones.7==1%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" checked="checked">CONTESTAR
+                       {%else%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" >CONTESTAR
+                       {%endif%}
+                    </td>
+
+                </tr>
+                <tr aling="left" class="medium">
+                    <td style="border: 1px solid #fff;">
+                        {%if array_instrucciones.2==1%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" checked="checked">PARA SU CONOCIMIENTO
+                       {%else%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" >PARA SU CONOCIMIENTO
+                       {%endif%}
+                    </td>
+                    <td style="border: 1px solid #fff; " >
+                        {%if array_instrucciones.5==1%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" checked="checked">INFORMAR
+                       {%else%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" >INFORMAR
+                       {%endif%}
+                    </td>
+                    <td style="border: 1px solid #fff;"  >
+                        {%if array_instrucciones.8==1%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" checked="checked">ARCHIVAR
+                       {%else%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" >ARCHIVAR
+                       {%endif%}
+                    </td>
+
+                </tr>
+                <tr aling="left" class="medium">
+                    <td style="border-top: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #fff;" >
+                        {%if array_instrucciones.3==1%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" checked="checked">PARA SU TRAMITACIÓN
+                       {%else%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" >PARA SU TRAMITACIÓN
+                       {%endif%}
+                    </td>
+                    <td colspan="2" style="border-top: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #fff;" >
+                        {%if array_instrucciones.6==1%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" checked="checked">PARA LA FIRMA
+                       {%else%}
+                       <input type="checkbox" name="aprobacion" value="aprobacion" >PARA LA FIRMA
+                       {%endif%}
+                       <br></td>
+                    
+
+                </tr>
+
+            </table>
+            <table  style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
+                <tr>
+                    <td colspan="2" class="medium" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">
+                        <strong>7.OBSERVACIONES:</strong><br><br>
+                        {{planilla.PlanillaValoracionOAC.observacionRemision | capitalize}}<br>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+                    <td class="medium" style="border-left: 1px solid #fff; border-right: 1px solid #fff; ">
+                        <strong>8. SELLO DE LA DEPENDENCIA</strong>
+                    </td>
+                    <td  style="border-top: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #fff;" align="center" ><span class="medium"><br><br><br><br><br><br>VIVIANA PERAZA<br>FIRMA </span></td>
+                     
+                </tr>
+               
+
+
+
+            </table>
+
+
+        {% endblock %}
+    </body>
+</html>

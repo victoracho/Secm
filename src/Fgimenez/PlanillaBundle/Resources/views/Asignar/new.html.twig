@@ -1,0 +1,95 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Asignar Caso
+{% endblock %}
+
+{% block page_content %}
+
+
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-9">
+
+
+
+            <div class="box box-primary">
+                {%if planilla.UltimoStatus.id==3 or planilla.UltimoStatus.id==4%}  
+                    {% set analista = 'Nuevo Analista' %}
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Reasignar Caso {{planilla.Codigo}}<span class="glyphicon glyphicon-file" aria-hidden="true"></span> </h3>
+                        <br /><br />
+                        <span style="font-size: 12px" class="text-danger">*&nbsp;Campos Obligatorios</span>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <label>Analista Actual:&nbsp;</label> {{analista_actual | title}}
+                    </div>
+
+
+                {%endif%}
+
+                {%if planilla.UltimoStatus.id==2%}  
+                    {% set analista = 'Analista' %}
+
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Asignar Caso {{planilla.Codigo}}<span class="glyphicon glyphicon-file" aria-hidden="true"></span> </h3>
+                        <br /><br />
+                        <span style="font-size: 12px" class="text-danger">*&nbsp;Campos Obligatorios</span>
+                    </div>
+                {%endif%}
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        {% for type, flashMessages in app.session.flashbag.all() %}
+                            {% for flashMessage in flashMessages %}
+                                <div class="alert alert-{{ type }}">
+                                    {{ flashMessage|raw }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+
+                {{ form_start(form) }}
+                <div class="box-body">
+                    <label><span class="text-danger">*&nbsp;</span>{{analista}}</label>{{ form_widget(form.analista_asignado) }}
+
+                    <br>
+
+                    {%if planilla.UltimoStatus.id==2%}  
+                        {{ form_widget(form.motivo_reasignacion, { 'attr':{ 'disabled':'disabled', 'style': 'display:none' } }) }}
+                    {%endif%}
+                    {%if planilla.UltimoStatus.id==3 or planilla.UltimoStatus.id==4%}  
+                        <label><span class="text-danger">*&nbsp;</span>Motivo Reasignaci&oacute;n</label>{{ form_widget(form.motivo_reasignacion) }}
+                    {%endif%}
+                </div>
+                <div class="box-footer">
+                    <button type="submit" name="submit" value="save" class="btn btn-success">
+                        Guardar <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                    </button>
+
+                </div>
+
+
+                {{ form_end(form) }}
+
+                <hr/>
+
+                <div class="form-group">
+                    <a class="btn btn-default" href="{{ path('planilla_index_asignar') }}">
+                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                        Volver al listado
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,30 @@
+Fgimenez\PlanillaBundle\Entity\Estatus:
+    type: entity
+    table: oac.estatus
+    repositoryClass: Fgimenez\PlanillaBundle\Repository\EstatusRepository
+
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        nombre:
+            type: string
+            length: 255
+            unique: true
+        descripcion:
+            type: text
+            nullable: true
+        status:
+            type: integer            
+            nullable: false
+            options:
+                default: '0'
+        
+    oneToMany:
+        EstatusPlanilla:
+            targetEntity: EstatusPlanilla
+            mappedBy: estatus
+        

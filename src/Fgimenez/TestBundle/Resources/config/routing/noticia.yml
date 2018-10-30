@@ -1,0 +1,42 @@
+noticia_crud:
+    path:  /
+    defaults: { _controller: "FgimenezTestBundle:Noticia:index" }
+
+noticia_crud_show:
+    path:  /{id}/show
+    defaults: { _controller: "FgimenezTestBundle:Noticia:show" }
+
+noticia_crud_new:
+    path:  /new
+    defaults: { _controller: "FgimenezTestBundle:Noticia:new" }
+
+noticia_crud_create:
+    path:  /create
+    defaults: { _controller: "FgimenezTestBundle:Noticia:create" }
+    requirements: { _method: post }
+
+noticia_crud_edit:
+    path:  /{id}/edit
+    defaults: { _controller: "FgimenezTestBundle:Noticia:edit" }
+
+noticia_crud_update:
+    path:  /{id}/update
+    defaults: { _controller: "FgimenezTestBundle:Noticia:update" }
+    requirements: { _method: post|put }
+
+noticia_crud_delete:
+    path:  /{id}/delete
+    defaults: { _controller: "FgimenezTestBundle:Noticia:delete" }
+    requirements: { _method: post|delete }
+    
+noticia_crud_by_id_delete:
+    path:  /delete/{id}
+    defaults: { _controller: "FgimenezTestBundle:Noticia:deleteById" }
+    requirements: { _method: get }
+    
+
+noticia_crud_bulk_action:
+    path:  /bulk-action
+    defaults: { _controller: "FgimenezTestBundle:Noticia:bulk" }
+    requirements: { _method: post }
+    

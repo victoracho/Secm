@@ -1,0 +1,42 @@
+categoria_crud:
+    path:  /
+    defaults: { _controller: "FgimenezTestBundle:Categoria:index" }
+
+categoria_crud_show:
+    path:  /{id}/show
+    defaults: { _controller: "FgimenezTestBundle:Categoria:show" }
+
+categoria_crud_new:
+    path:  /new
+    defaults: { _controller: "FgimenezTestBundle:Categoria:new" }
+
+categoria_crud_create:
+    path:  /create
+    defaults: { _controller: "FgimenezTestBundle:Categoria:create" }
+    requirements: { _method: post }
+
+categoria_crud_edit:
+    path:  /{id}/edit
+    defaults: { _controller: "FgimenezTestBundle:Categoria:edit" }
+
+categoria_crud_update:
+    path:  /{id}/update
+    defaults: { _controller: "FgimenezTestBundle:Categoria:update" }
+    requirements: { _method: put }
+
+categoria_crud_delete:
+    path:  /{id}/delete
+    defaults: { _controller: "FgimenezTestBundle:Categoria:delete" }
+    requirements: { _method: delete }
+    
+categoria_crud_by_id_delete:
+    path:  /delete/{id}
+    defaults: { _controller: "FgimenezTestBundle:Categoria:deleteById" }
+    requirements: { _method: delete }
+    
+
+categoria_crud_bulk_action:
+    path:  /bulk-action
+    defaults: { _controller: "FgimenezTestBundle:Categoria:bulk" }
+    requirements: { _method: post }
+    

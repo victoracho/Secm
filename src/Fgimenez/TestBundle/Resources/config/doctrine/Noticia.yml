@@ -1,0 +1,69 @@
+Fgimenez\TestBundle\Entity\Noticia:
+    type: entity
+    table: test_noticia
+    repositoryClass: Fgimenez\TestBundle\Repository\NoticiaRepository
+    gedmo:
+        translation:
+            locale: locale
+            
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        titulo:
+            type: string
+            length: 255
+            gedmo:
+                - translatable
+            
+        antetitulo:
+            type: string
+            length: 255
+            nullable: true
+            gedmo:
+                - translatable
+            
+        resumen:
+            type: text
+            nullable: true
+            gedmo:
+                - translatable
+            
+        contenido:
+            type: text
+            gedmo:
+                - translatable
+            
+        fecha:
+            type: date
+            nullable: true
+        slug:
+            type: string
+            length: 255
+            unique: true
+
+        imagen:
+            type: string
+            length: 255
+            nullable: true           
+            
+        publicado:
+            type: boolean
+            nullable: true
+            
+        categoria_id:
+            type: integer
+            nullable: true
+    
+    manyToOne:
+        categoria:
+            targetEntity: Categoria
+            inversedBy: noticias
+            joinColumn:
+                name: categoria_id
+                referencedColumnName: id
+                
+    lifecycleCallbacks: {  }

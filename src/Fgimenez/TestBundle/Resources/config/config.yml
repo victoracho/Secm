@@ -1,0 +1,8 @@
+imports:
+      
+    - { resource: security.yml }    
+    
+
+parameters:
+    test_categoria_directory: '%kernel.root_dir%/../web/uploads/test_categoria'    
+ 

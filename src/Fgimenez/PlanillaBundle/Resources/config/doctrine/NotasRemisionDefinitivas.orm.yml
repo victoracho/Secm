@@ -1,0 +1,41 @@
+Fgimenez\PlanillaBundle\Entity\NotasRemisionDefinitivas:
+    type: entity
+    table: oac.notas_remision_definitivas
+    repositoryClass: Fgimenez\PlanillaBundle\Repository\NotasRemisionDefinitivasRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+          
+        asuntoRemision:
+            type: text
+            column: asunto_remision
+        observacionRemision:
+            type: text
+            column: observacion_remision
+            nullable: true
+        instrucciones:
+            type: json_array
+        analistaRemision:
+            type: string
+            length: 255
+            column: analista_remision
+        oficioRemision:
+            type: string
+            length: '50'
+            column: oficio_remision
+        fechaNotaRemision:
+            type: datetime
+            column: fecha_nota_remision
+    lifecycleCallbacks: {  }
+    
+    manyToOne:
+        notas_remision_planilla:
+            targetEntity: Planilla
+            inversedBy: planilla_notas_remision            
+            joinColumn:
+                name: id_documento
+                referencedColumnName: id

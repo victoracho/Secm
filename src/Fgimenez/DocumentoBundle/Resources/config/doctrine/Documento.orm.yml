@@ -1,0 +1,61 @@
+Fgimenez\DocumentoBundle\Entity\Documento:
+    type: entity
+    table: generico.soporte
+    repositoryClass: Fgimenez\DocumentoBundle\Repository\DocumentoRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        idTipoDocumento:
+            type: integer
+            nullable: true
+            column: id_tipo_documento
+        ruta:
+            type: string
+            length: 255
+            nullable: true
+        resumen:
+            type: text
+        status:
+            type: boolean
+        acceso:
+            type: string
+            length: 255
+            nullable: true
+        hash:
+            type: string
+            length: 255
+            nullable: true        
+        nombre:
+            type: string
+            length: 255
+        
+        usuarioCreacion:
+            type: string
+            length: 30
+            column: usuarioCreacion
+            
+        fechaCreacion:
+          type: datetime
+          options:
+                default: now()
+          gedmo:
+            timestampable:
+              on: create
+        
+        
+            
+    lifecycleCallbacks: {  }
+    
+    manyToOne:
+        tipo_documento:
+            targetEntity: TipoDocumento
+            inversedBy: documento
+            joinColumn:
+                name: id_tipo_documento
+                referencedColumnName: id               
+    
+        

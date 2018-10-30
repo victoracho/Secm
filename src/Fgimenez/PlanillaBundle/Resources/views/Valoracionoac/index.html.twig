@@ -1,0 +1,272 @@
+{% extends 'PetkoparaCrudGeneratorBundle::base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - valoracionOAC 
+{% endblock %}
+
+{% block page_content %}
+
+
+
+
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <div class="box box-primary">
+
+
+                <div class="box-header with-border">
+                    <h3 class="box-title"><a href="{{ path('valoracionoac') }}">ValoracionOAC</a> </h3>
+                </div>               
+
+                <!-- FILTERING -->
+                <div class="col-md-12">
+                    <div  id="filters" class="collapse">
+
+                        <form class="well" action="{{ path('valoracionoac') }}" method="get" >
+                            <div class="row">
+
+                                <div class="col-md-6">{{ form_row(filterForm.id) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.fechaEscrito) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.nombreQuienSuscribe) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.condicionQuienSuscribe) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.numeroOficio) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.enteOrgano) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.referenciaNormativa) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.articulo) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.numeral) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.literal) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.competencia) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.observaciones) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.usuarioCreacion) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.fechaCreacion) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.usuarioModificacion) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.fechaModificacion) }}</div>
+
+                                <div class="col-md-6">
+                                    {{ form_rest(filterForm) }}
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-warning" name="filter_action" value="filter"> <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtro</button>
+                                        <button type="submit" class="btn btn-default" name="filter_action" value="reset"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- END FILTERING -->
+
+
+                <div class="col-md-3 pull-left">
+
+                    <!-- PAGE SIZE -->
+                    <div class="pagination form-inline ">
+                        <select class = "form-control"  onchange="window.location = this.value" >
+                            <option value='{{ path('valoracionoac', app.request.query.all|merge({'pcg_show': '10'})) }}' {% if app.request.get('pcg_show') == 10 %} selected {% endif %}>10</option>
+                            <option value='{{ path('valoracionoac', app.request.query.all|merge({'pcg_show': '20'})) }}' {% if app.request.get('pcg_show') == 20 %} selected {% endif %}>20</option>
+                            <option value='{{ path('valoracionoac', app.request.query.all|merge({'pcg_show': '50'})) }}' {% if app.request.get('pcg_show') == 50 %} selected {% endif %}>50</option>
+                            <option value='{{ path('valoracionoac', app.request.query.all|merge({'pcg_show': '100'})) }}' {% if app.request.get('pcg_show') == 100 %} selected {% endif %}>100</option>
+                            <option value='{{ path('valoracionoac', app.request.query.all|merge({'pcg_show': '500'})) }}' {% if app.request.get('pcg_show') == 500 %} selected {% endif %}>500</option>
+                        </select>
+                    </div>
+                    <!-- END PAGE SIZE -->
+
+                </div>
+
+                <div class="col-md-6">
+
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <a class="btn btn-primary h3 pull-right" href="{{ path('valoracionoac_new') }}" style="margin-bottom:10px">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuevo
+                    </a>
+                    <a class="btn dropdown-toggle pull-right h3" data-toggle="collapse" data-target="#filters">
+                        Filtro
+                        <span class="caret"></span>
+                    </a>
+                </div>
+
+
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        {% for type, flashMessages in app.session.flashbag.all() %} 
+                            {% for flashMessage in flashMessages %}
+                                <div class="alert alert-{{ type }}">
+                                    {{ flashMessage|raw }}
+                                </div>
+                            {% endfor %} 
+                        {% endfor %} 
+                    </div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="table-responsive col-md-12">
+
+
+
+
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">Registros valoracionOAC</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+
+                                <form method="POST" id="bulk_form" action="{{ path('valoracionoac_bulk_action') }} ">
+                                    <table id="example2" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th width="20px"><input type="checkbox" class="check-all" onclick="toggleAll(this)"></th>
+
+                                                {% import "PetkoparaCrudGeneratorBundle::macros/th_sortable.html.twig" as macros %}
+                                                <th>{{macros.th_sortable('id',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('fechaEscrito',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('nombreQuienSuscribe',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('condicionQuienSuscribe',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('numeroOficio',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('enteOrgano',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('referenciaNormativa',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('articulo',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('numeral',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('literal',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('competencia',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('observaciones',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('usuarioCreacion',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('fechaCreacion',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('usuarioModificacion',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+                                                <th>{{macros.th_sortable('fechaModificacion',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'valoracionoac')}}</th>
+
+
+                                                <th width = "130px">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for valoracionOAC in valoracionOACs %}
+                                                <tr>
+                                                    <td><input type="checkbox" name="ids[]" onclick='bulkSubmitBtnManage();' class="check-all" value="{{valoracionOAC.id}}"/></td>
+                                                    <td><a href="{{ path('valoracionoac_edit', { 'id': valoracionOAC.id }) }}">{{ valoracionOAC.id }}</a></td>
+                                                    <td>{%- if valoracionOAC.fechaEscrito %}{{ valoracionOAC.fechaEscrito|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                                    <td>{{ valoracionOAC.nombreQuienSuscribe }}</td>
+                                                    <td>{{ valoracionOAC.condicionQuienSuscribe }}</td>
+                                                    <td>{{ valoracionOAC.numeroOficio }}</td>
+                                                    <td>{{ valoracionOAC.enteOrgano }}</td>
+                                                    <td>{{ valoracionOAC.referenciaNormativa }}</td>
+                                                    <td>{{ valoracionOAC.articulo }}</td>
+                                                    <td>{{ valoracionOAC.numeral }}</td>
+                                                    <td>{{ valoracionOAC.literal }}</td>
+                                                    <td>{{ valoracionOAC.competencia }}</td>
+                                                    <td>{{ valoracionOAC.observaciones }}</td>
+                                                    <td>{{ valoracionOAC.usuarioCreacion }}</td>
+                                                    <td>{%- if valoracionOAC.fechaCreacion %}{{ valoracionOAC.fechaCreacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                                    <td>{{ valoracionOAC.usuarioModificacion }}</td>
+                                                    <td>{%- if valoracionOAC.fechaModificacion %}{{ valoracionOAC.fechaModificacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+
+                                                    <td class="actions">
+                                                        <a  onclick="return confirm('Are you sure!');" title="Delete" class="btn btn-danger btn-sm" href="{{ path('valoracionoac_by_id_delete', { 'id': valoracionOAC.id}) }}">
+                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                        </a>
+                                                        <a title='Show' class="btn btn-info btn-sm" href="{{ path('valoracionoac_show', { 'id': valoracionOAC.id }) }}">
+                                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                                        </a>
+                                                        <a  title='Edit' class="btn btn-primary btn-sm" href="{{ path('valoracionoac_edit', { 'id': valoracionOAC.id }) }}">
+                                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                                        </a>
+                                                    </td>
+
+
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+
+                                    </table>
+                                </form>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+
+                    </div>
+
+                </div>           
+
+
+
+
+
+                <div class="row">
+                    <div class="col-md-4 pull-left">
+                        <div class="pagination form-inline ">
+                            <select class = "form-control" name="bulk_action" >
+                                <option value="">--Choose--</option>
+                                <option value="delete">DELETE</option>
+                            </select>
+                            <input type="submit" id='bulkSubmitBtn' form="bulk_form" class="form-control btn btn-danger btn-sm" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-md-offset-2 text-right">
+                        {{ pagerHtml|raw }} 
+                    </div>
+                </div> <!-- /#bottom -->
+
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts_inline %}
+    <script>
+        $(function () {
+            $('#example2').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
+            });
+        });
+    </script>
+
+{% endblock %}

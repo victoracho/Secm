@@ -1,0 +1,39 @@
+Fgimenez\PlanillaBundle\Entity\DocumentoSolicitante:
+    type: entity
+    table: oac.documento_solicitante
+    repositoryClass: Fgimenez\PlanillaBundle\Repository\DocumentoSolicitanteRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        idPlanilla:
+            type: integer
+            column: id_planilla
+        idPersona:
+            type: integer
+            column: id_persona
+        usuarioCreacion:
+            type: string
+            length: '50'
+        fechaCreacion:
+            type: datetime
+    lifecycleCallbacks:   
+            prePersist: [setFechaCreacionValue]
+    
+    manyToOne:
+        planilla:
+            targetEntity: Planilla
+            inversedBy: solicitantes            
+            joinColumn:
+                name: id_planilla
+                referencedColumnName: id  
+                
+        persona:
+            targetEntity: \jsanchez\DatosPersonalesBundle\Entity\persona
+            inversedBy: persona_solicitantes
+            joinColumn:
+                name: id_persona
+                referencedColumnName: id

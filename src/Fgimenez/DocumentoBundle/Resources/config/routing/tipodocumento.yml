@@ -1,0 +1,42 @@
+tipodocumento:
+    path:  /
+    defaults: { _controller: "FgimenezDocumentoBundle:TipoDocumento:index" }
+
+tipodocumento_show:
+    path:  /{id}/show
+    defaults: { _controller: "FgimenezDocumentoBundle:TipoDocumento:show" }
+
+tipodocumento_new:
+    path:  /new
+    defaults: { _controller: "FgimenezDocumentoBundle:TipoDocumento:new" }
+
+tipodocumento_create:
+    path:  /create
+    defaults: { _controller: "FgimenezDocumentoBundle:TipoDocumento:create" }
+    requirements: { _method: post }
+
+tipodocumento_edit:
+    path:  /{id}/edit
+    defaults: { _controller: "FgimenezDocumentoBundle:TipoDocumento:edit" }
+
+tipodocumento_update:
+    path:  /{id}/update
+    defaults: { _controller: "FgimenezDocumentoBundle:TipoDocumento:update" }
+    requirements: { _method: post|put }
+
+tipodocumento_delete:
+    path:  /{id}/delete
+    defaults: { _controller: "FgimenezDocumentoBundle:TipoDocumento:delete" }
+    requirements: { _method: post|delete }
+    
+tipodocumento_by_id_delete:
+    path:  /delete/{id}
+    defaults: { _controller: "FgimenezDocumentoBundle:TipoDocumento:deleteById" }
+    requirements: { _method: get }
+    
+
+tipodocumento_bulk_action:
+    path:  /bulk-action
+    defaults: { _controller: "FgimenezDocumentoBundle:TipoDocumento:bulk" }
+    requirements: { _method: post }
+    

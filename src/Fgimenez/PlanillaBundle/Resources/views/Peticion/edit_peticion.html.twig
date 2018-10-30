@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="{{ asset('bundles/avanzuadmintheme/vendor/adminlte/plugins/datepicker/datepicker3.css') }}" />
+<div class="row">
+    <div>
+        <table>
+            <tr style="font-size:14px">
+                <td width="300">
+                    <label >N&uacute;mero de Caso:&nbsp;</label>{{planilla.codigo}}
+                </td>
+
+                <td>
+                    <strong>Tipo Requerimiento:&nbsp;</strong>{{planilla.TipoCaso.nombre}}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br>
+
+    {#{{ form_widget(edit_form) }}#}
+
+    {#{{ form_widget(edit_form.fechaHecho, {'attr':{'value':planilla.fechaHecho|date('Y-m-d')} }) }}#}
+
+    <label><span class="text-danger">*&nbsp;</span>Mecanismo Presentaci&oacute;n</label>{{ form_widget(edit_form.tipo_atencion) }}
+    <br>
+    <label><span class="text-danger">*&nbsp;</span>Solicitud en Otro Organismo</label>{{ form_widget(edit_form.solicitud) }}
+    <br>
+    <label><span class="text-danger">*&nbsp;</span>Resumen del Hecho</label>{{ form_widget(edit_form.hecho,  { 'attr': {'class': 'solo-letras-signos'} }) }}
+    <br>
+    <label><span class="text-danger">*&nbsp;</span>Fecha del Hecho</label>{{ form_widget(edit_form.fechaHecho,  {'attr':{'value':planilla.fechaHecho|date('Y-m-d'), 'readonly':'readonly'} }) }}
+
+    <input type="hidden" id="peticion_codigo" name="peticion[codigo]" value="{{ planilla.codigo }}" />
+</div>

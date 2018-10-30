@@ -1,0 +1,335 @@
+{% extends 'blank.html.twig' %}
+{% block page_content %}
+
+    <button type="button" id="btnModal" class="btn btn-primary  pull-left" data-toggle="modal" data-target="#myModal">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuevo
+    </button>
+    <br/><br/><br/>
+    <div id="listado_documentos">
+        {{ render(controller('FgimenezDocumentoBundle:DocumentoInterfaz:mostrar', {'enlace':enlace  })) }}
+    </div>    
+
+
+
+    <div class="example-modal" >
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+
+                    <div class="modal-header">
+                        <button type="button" id="myModalClose" class="close" data-dismiss="modal" data-backdrop="false" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+
+                    </div>
+                    <div class="modal-body">                 
+                        <div>
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Soportes Documentales <span class="glyphicon glyphicon-file" aria-hidden="true"></span> Caso {{codigo}}</h3>
+                                <br><br>
+                    <span style="font-size: 12px" class="text-danger">*&nbsp;Campos Obligatorios</span>
+                            </div>
+                            <div class="box box-primary"></div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {% for type, flashMessages in app.session.flashbag.all() %} 
+                                        {% for flashMessage in flashMessages %}
+                                            <div class="alert alert-{{ type }}">
+                                                {{ flashMessage|raw }}
+                                            </div>
+                                        {% endfor %} 
+                                    {% endfor %} 
+                                </div>
+                            </div>
+
+
+                            {{ form_start(form, {'attr':{'id':'new-form','action':path('documentoFront_crear')}}) }}
+                            <div class="box-body">
+                                {{ form_row(form.tipo_documento) }}
+                                <div id="divFormulario">    
+                                    <div id="divOcultar">     
+
+                                    <label><span class="text-danger">*&nbsp;</span>Adjuntar Archivo</label>{{ form_widget(form.ruta) }}
+                                    <br>
+                                    </div>
+                                    <label><span class="text-danger">*&nbsp;</span>Nombre</label>{{ form_widget(form.Nombre, { 'attr': {'class': 'solo-letras-signos'} }) }}
+                                    <br><label><span class="text-danger">*&nbsp;</span>Resumen</label>{{ form_widget(form.resumen, { 'attr': {'class': 'solo-letras-signos'} }) }}
+                                    {{ form_rest(form) }}
+                                </div>
+
+
+                                <input type="hidden" id="documento_id_externo" name="enlace[id]" value="{{ enlace.id }}" />
+                                <input type="hidden" id="documento_entidad" name="enlace[entidad]" value="{{enlace.entidad}}"/>
+                                <input type="hidden" id="documento_ruta_absoluta" name="enlace[ruta]" value="{{enlace.ruta}}"/>
+
+                            </div>     
+                            <hr/>
+                            <div class="modal-footer">
+
+
+
+
+                                <button type="submit" name="submit" id="btnSubmit" value="save" class="btn btn-success">Guardar <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
+                                <button type="button" class="btn btn-default " data-dismiss="modal">Cerrar</button>
+                            </div>
+
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts_inline %}
+    <script src="/bundles/avanzuadmintheme/static/dev/scripts/admin-lte-all.js"></script>
+    <script src="/bundles/organizaciones/js/validaciones.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            var $form = $('#new-form');
+
+
+            $('#btnModal').click(function (e) {
+                $form.trigger('reset');
+
+                //$('#documento_resumen').val('');
+                //CKEDITOR.instances['documento_resumen'].updateElement();
+                //CKEDITOR.instances['documento_resumen'].setData($('#documento_resumen').val());
+
+                $('#divFormulario').hide();
+                $('#divOcultar').hide();
+                $form.attr('action', '{{ path('documentoFront_crear') }}');
+
+                // alert($form.attr('action') + '---' + $form.attr('method'));
+                e.preventDefault();
+            });
+
+
+
+            $('#documento_tipo_documento').change(function (e) {
+
+                //alert($('#documento_tipo_documento:selected').text());
+
+                $('#documento_tipo_documento_text').val($('#documento_tipo_documento option:selected').text());
+                //alert($('#documento_tipo_documento_text').val());
+                if ($('#documento_tipo_documento').val()==1) {
+                    
+                    $('#divFormulario').show();
+                    $('#divOcultar').show();
+                    
+                } 
+                if ($('#documento_tipo_documento').val()==2) {
+                    $('#divFormulario').show();
+                    $('#divOcultar').hide();
+                }
+                if ($('#documento_tipo_documento').val()==''){
+                    
+                    $('#divFormulario').hide();
+                    $('#divOcultar').hide();
+                }
+                e.preventDefault();
+            });
+
+            /*$('#documento_tipoSoporte').change(function (e) {
+             
+             var tipo_soporte = $('#documento_tipoSoporte').val();
+             
+             
+             alert(tipo_soporte);
+             
+             if (tipo_soporte == 'F') {
+             
+             $('#documento_tipo_documento_text').val('soporte físico');
+             $('#divFormulario').show();
+             $('#divOcultar').hide();
+             
+             } 
+             if(tipo_soporte == 'D'){
+             $('#divFormulario').show();
+             $('#divOcultar').show();
+             $('#documento_tipo_documento_text').val('soporte digital');
+             
+             }
+             if(tipo_soporte == ''){
+             $('#divFormulario').hide();
+             $('#divOcultar').hide();
+             $('#documento_tipo_documento_text').val('sin soporte');
+             
+             }
+             e.preventDefault();
+             });*/
+
+
+            $form.submit(function (e) {
+
+                var data = new FormData(this);
+
+//Realizamos la petición
+                $.ajax({
+                    url: $form.attr('action'),
+                    type: $form.attr('method'),
+                    data: data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    mimeType: "multipart/form-data",
+                    beforeSend: function (xhr) {
+                        //xhr.overrideMimeType("text/plain; charset=x-user-defined");
+                        $('#listado_documentos').html(
+                                'Cargando...'
+                                );
+                    },
+                    success: function (html) {
+
+
+                        //$("#myModal").delay( 3000 ).modal('hide');
+                        $('#listado_documentos').html(html);
+
+                        // Remplazamos la forma actual.
+                        /*$('#aplicacion_ejemplobundle_persona').replaceWith(
+                         // ... Con la respuesta ajax
+                         $(html).find('#aplicacion_ejemplobundle_persona')
+                         );*/
+                    },
+                    // código a ejecutar si la petición falla;
+                    // son pasados como argumentos a la función
+                    // el objeto de la petición en crudo y código de estatus de la petición
+                    error: function (xhr, status) {
+                        alert('Disculpe, ocurrió un problema');
+                    },
+                    // código a ejecutar sin importar si la petición falló o no
+                    complete: function (xhr, status) {
+
+                        //alert('Petición realizada');
+                        $('#myModal').modal('hide');
+                        if ($('.modal-backdrop').is(':visible')) {
+                            $('body').removeClass('modal-open');
+                            $('.modal-backdrop').remove();
+                        }
+
+                    }
+                });
+                e.preventDefault();
+            });
+
+
+        });
+
+
+
+        function eliminarDocumento(idEntidad, entidad, rutaEliminar) {
+
+            $.ajax({
+                url: rutaEliminar,
+                type: 'POST',
+                data: {
+                    enlace: {
+                        id: idEntidad,
+                        entidad: entidad
+
+                    }
+                },
+                beforeSend: function (xhr) {
+                    //xhr.overrideMimeType("text/plain; charset=x-user-defined");
+                    $('#listado_documentos').html(
+                            'Cargando...'
+                            );
+                },
+                success: function (html) {
+                    //alert(html);
+
+                    //$("#myModal").delay( 3000 ).modal('hide');
+                    $('#listado_documentos').html(html);
+
+                    // Remplazamos la forma actual.
+                    /*$('#aplicacion_ejemplobundle_persona').replaceWith(
+                     // ... Con la respuesta ajax
+                     $(html).find('#aplicacion_ejemplobundle_persona')
+                     );*/
+                },
+                // código a ejecutar si la petición falla;
+                // son pasados como argumentos a la función
+                // el objeto de la petición en crudo y código de estatus de la petición
+                error: function (xhr, status) {
+                    alert('Disculpe, ocurrió un problema');
+                },
+                // código a ejecutar sin importar si la petición falló o no
+                complete: function (xhr, status) {
+
+                }
+            });
+        }
+
+
+
+
+        function consultarDocumento(rutaConsultar, rutaModificar) {
+
+
+            var $form = $('#new-form');
+            var idEntidad = $('#documento_id_externo').val();
+            var entidad = $('#documento_entidad').val();
+
+
+            //alert($form.attr('action'));
+
+            $.ajax({
+                url: rutaConsultar,
+                type: 'POST',
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    //xhr.overrideMimeType("text/plain; charset=x-user-defined");
+                    $form.trigger('reset');
+                },
+                success: function (json) {
+
+                    $('#btnModal').trigger("click");
+                    $('#divOcultar').hide();
+
+                    $('#documento_ruta2').val(json[0].ruta);
+                    //$('#documento_resumen').html(json[0].resumen);
+                    $('#documento_resumen').val(json[0].resumen);
+
+
+                    if (json[0].status)
+                        $('#documento_status').prop('checked', true);
+
+                    $('#documento_tipo_documento').val(json[0].idTipoDocumento);
+                    $('#documento_acceso').val(json[0].acceso);
+                    $('#documento_id_externo').val(idEntidad);
+                    $('#documento_entidad').val(entidad);
+
+                    CKEDITOR.instances['documento_resumen'].setData($('#documento_resumen').val());
+                    //CKEDITOR.instances['documento_resumen'].updateElement();
+                    // alert($('#documento_resumen').val()+'///'+$('#documento_ruta2').val());
+
+                    //$('#documento_resumen').text($('#documento_resumen').val());
+
+                    $form.attr('action', rutaModificar);
+                    //$('#listado_documentos').html(html);
+                },
+                // código a ejecutar si la petición falla;
+                // son pasados como argumentos a la función
+                // el objeto de la petición en crudo y código de estatus de la petición
+                error: function (xhr, status) {
+                    alert('Disculpe, ocurrió un problema ' + status);
+                },
+                // código a ejecutar sin importar si la petición falló o no
+                complete: function (xhr, status) {
+
+                }
+            });
+        }
+
+
+
+    </script>                  
+
+
+
+{% endblock %}

@@ -1,0 +1,163 @@
+Fgimenez\PlanillaBundle\Entity\Planilla:
+    type: entity
+    table: oac.documento
+    repositoryClass: Fgimenez\PlanillaBundle\Repository\PlanillaRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        idTipo:
+            type: integer
+            nullable: true
+            column: id_tipo
+            
+        MecanismoPresentacion:
+            type: integer
+            nullable: true
+            column: id_tipo_atencion   
+            
+        codigo:
+            type: string
+            length: 255
+            unique: true
+        hecho:
+            type: text
+        fechaHecho:
+            type: date
+            nullable: true
+            column: fecha_hecho
+        valoracion:
+            type: text
+            nullable: true
+
+        created:
+          type: datetime
+          options:
+                default: now()
+          gedmo:
+            timestampable:
+              on: create
+        
+        updated:
+          type: datetime
+          options:
+                default: now()
+          gedmo:
+            timestampable:
+             on: update
+        
+        fechaUltimoStatus:
+            type: datetime
+            nullable: true                
+            gedmo:
+                timestampable:
+                    on: change
+                    field: ultimoStatus            
+            column: fecha_ultimo_estatus
+        
+        estado:
+            type: integer
+            column: estado
+           
+            
+        municipio:
+            type: integer
+            column: municipio
+            
+            
+        parroquia:
+            type: integer
+            column: parroquia
+            
+        
+        adicionales:
+            type: json_array
+            column: adicionales
+            nullable: true
+            
+        usuarioCreacion:
+            type: string
+            length: 30
+            column: usuarioCreacion
+        
+        usuarioModificacion:
+            type: string
+            length: 30
+            column: usuarioModificacion
+            nullable: true
+        
+        AnalistaAsignado:
+            type: string
+            length: 30
+            column: analista_asignado
+            nullable: true
+        
+    oneToMany:
+        planilla_estatus:
+            targetEntity: EstatusPlanilla
+            cascade: ["persist", "remove"]
+            mappedBy: planilla
+            
+        planilla_involucrado:
+            targetEntity: \jsanchez\InvolucradosBundle\Entity\Involucrados
+            cascade: ["persist", "remove"]
+            mappedBy: documento
+        
+        solicitantes:
+            targetEntity: DocumentoSolicitante
+            cascade: ["persist", "remove"]
+            mappedBy: planilla
+            
+        planilla_notas_remision:
+            targetEntity: NotasRemisionDefinitivas
+            cascade: ["persist", "remove"]
+            mappedBy: notas_remision_planilla
+
+            
+    manyToOne:
+        tipo_caso:
+            targetEntity: TipoCaso
+            joinColumn:
+                name: id_tipo
+                referencedColumnName: id
+                
+        tipo_atencion:
+            targetEntity: \Mmartin4\MantenimientoBundle\Entity\Mecanismo_Presentacion
+            joinColumn:
+                name: id_tipo_atencion
+                referencedColumnName: id
+                
+        ultimo_status:
+            targetEntity: Estatus
+            joinColumn:
+                name: ultimo_estatus
+                referencedColumnName: id
+                
+        motivo_reasignacion:
+            targetEntity: \Mmartin4\MantenimientoBundle\Entity\motivo_reasignacion
+            inversedBy: MotivoReasignacionPlanilla
+            joinColumn:
+                name: motivo_reasignacion
+                referencedColumnName: id
+                
+    manyToMany:
+        documentos:
+          targetEntity: \Fgimenez\DocumentoBundle\Entity\Documento
+          cascade: ["persist", "remove"]
+          joinTable:
+            name: oac.documento_soporte
+            joinColumns:
+              id_planilla:
+                referencedColumnName: id
+            inverseJoinColumns:
+              id_documento:
+                referencedColumnName: id
+                
+    oneToOne:
+        planilla_valoracionOAC:
+          targetEntity: ValoracionOAC
+          mappedBy: valoracionOAC_planilla             
+

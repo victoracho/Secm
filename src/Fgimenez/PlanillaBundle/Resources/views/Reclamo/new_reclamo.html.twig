@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col-md-12">
+
+        {#{{ form_widget(form) }}#}
+            <label><span class="text-danger">*&nbsp;</span>Mecanismo Presentaci&oacute;n</label>{{ form_widget(form.tipo_atencion) }}
+            <br>
+            <label><span class="text-danger">*&nbsp;</span>Naturaleza</label>{{ form_widget(form.naturaleza) }}
+            <br>
+             <label><span class="text-danger">*&nbsp;</span>Condici&oacute;n</label>{{ form_widget(form.condicion) }}
+            <br>
+            <label><span class="text-danger">*&nbsp;</span>Resumen del Hecho</label>{{ form_widget(form.hecho,  { 'attr': {'class': 'solo-letras-signos'} }) }}
+             <br>
+            <label><span class="text-danger">*&nbsp;</span>Fecha del Hecho</label>{{ form_widget(form.fechaHecho, {'attr':{'readonly':'readonly'}}) }}
+            <br>
+        <span><strong>Lugar del Hecho</strong></span>
+        <br><br>
+        {{render (controller('territorioBundle:Default:indexDireccionEMP', {'valor':planilla})) }}
+
+    </div>
+</div>
+<script src="{{ asset('bundles/avanzuadmintheme/vendor/adminlte/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
+<script src="{{ asset('bundles/avanzuadmintheme/vendor/adminlte/plugins/datepicker/locales/bootstrap-datepicker.es.js') }}"></script>
+<script src="/bundles/organizaciones/js/validaciones.js"></script>
+<script>
+    //fecha actual del servidor
+    var fecha = new Date();
+
+    //se restan los 5 años
+    //fecha.setFullYear(fecha.getFullYear() - 5);
+
+    $('#reclamo_fechaHecho').datepicker({
+        format: "yyyy-mm-dd",
+        endDate: "today",
+        //startDate: fecha.toJSON().slice(0,10), //muestra la fecha en el formato requerido
+        maxViewMode: 3,
+        todayBtn: true,
+        clearBtn: true,
+        language: "es",
+        autoclose: true,
+        orientation: "bottom left",
+        todayHighlight: true
+    });
+
+
+</script>

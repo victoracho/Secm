@@ -1,0 +1,105 @@
+Fgimenez\PlanillaBundle\Entity\ValoracionOAC:
+    type: entity
+    table: oac.valoracion_OAC
+    repositoryClass: Fgimenez\PlanillaBundle\Repository\ValoracionOACRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        fechaEscrito:
+            type: datetime
+            nullable: true
+        nombreQuienSuscribe:
+            type: string
+            length: '100'
+            nullable: true
+        condicionQuienSuscribe:
+            type: string
+            length: 255
+            nullable: true
+        numeroOficio:
+            type: string
+            length: '20'
+            nullable: true
+        enteOrgano:
+            type: integer
+            nullable: true
+        competencia:
+            type: integer
+        organismo_competencia:
+            type: integer
+        observaciones:
+            type: text 
+        usuarioCreacion:
+            type: string
+            length: 50
+        fechaCreacion:
+            type: datetime
+        usuarioModificacion:
+            type: string
+            length: 50
+            nullable: true
+        fechaModificacion:
+            type: datetime
+            nullable: true
+        correcciones:
+            type: text
+            nullable: true
+        asuntoRemision:
+            type: text
+            nullable: true
+            column: asunto_remision
+        observacion_remision:
+            type: text
+            nullable: true
+            column: observacion_remision
+        
+        fecha_remision:
+            type: datetime
+            nullable: true                
+                 
+        asuntoRemision:
+            type: text
+            nullable: true
+            column: asunto_remision
+                    
+        instrucciones:
+            type: json_array
+            column: instrucciones
+            nullable: true
+        AnalistaRemision:
+            type: string
+            length: 30
+            column: analista_remision
+            nullable: true
+        OficioRemision:
+            type: string
+            length: '20'
+            nullable: true
+            column: oficio_remision
+            
+        fecha_nota_remision:
+            type: datetime
+            nullable: true                
+            
+        
+    lifecycleCallbacks:
+        prePersist: [setCreacion]
+        preUpdate: [setModificacion]
+
+    oneToOne:
+        valoracionOAC_planilla:
+           targetEntity: Planilla
+           inversedBy: planilla_valoracionOAC
+           joinColumn:
+             name: planilla_id
+             referencedColumnName: id
+             
+    oneToMany:
+        valoracionOAC_referenciasNormativas:
+            targetEntity: ValoracionReferenciasNormativas
+            cascade: ["persist"]
+            mappedBy: valoracionOAC

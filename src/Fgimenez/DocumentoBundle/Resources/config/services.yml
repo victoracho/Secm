@@ -1,0 +1,4 @@
+services:
+#    fgimenez_documento.example:
+#        class: Fgimenez\DocumentoBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

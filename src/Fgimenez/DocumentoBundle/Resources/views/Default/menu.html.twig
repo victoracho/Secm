@@ -1,0 +1,10 @@
+<ul class="sidebar-menu">
+    {#% for item in menu %}
+        {{ macro.menu_item(item) }}
+    {% endfor %#}
+
+    <li class="header">Documento - tipo_documento</li>    
+    <li><a href="{{ path('tipodocumento') }}"> <i class="fa fa-circle-o"></i> Tipo Soporte</a></li>    
+    <li><a href="{{ path('documento_crud') }}"> <i class="fa fa-circle-o"></i>Soporte Crud</a></li>    
+    
+</ul>

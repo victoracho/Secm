@@ -1,0 +1,47 @@
+{{ "{% extends '"~  base_template  ~ "' %}" }}
+
+{{ "{% block title %}" }}
+{{ "{{ parent() }}" }} - Editar {{ entity_singularized }}
+{{ "{% endblock %}" }}
+
+{{ "{% block page_content %}" }}
+
+
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-9">
+
+
+
+        <div class="box box-warning">
+            <div class="box-header with-border">
+                <h3 class="box-title">Editar {{ entity_singularized }} <span class="glyphicon glyphicon-file" aria-hidden="true"></span> </h3>
+            </div>
+
+
+
+            {% include 'crud/views/others/flash_messages.html.twig.twig' %}
+
+            {{ "{{ form_start(edit_form) }}" }}
+            <div class="box-body">
+                {{ "{{ form_widget(edit_form) }}" }}
+            </div>
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Guardar
+                </button>
+            </div>
+            {{ "{{ form_end(edit_form) }}" }}
+
+            <hr/>
+
+            {% set hide_edit, hide_delete, hide_new = true, false, false %}
+            {% include 'crud/views/others/record_actions.html.twig.twig' %}
+        </div>
+
+    </div>
+</div>
+
+
+{{ "{% endblock %}" }}
+

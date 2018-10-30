@@ -1,0 +1,50 @@
+{{ "{% extends '"~  base_template  ~ "' %}" }}
+
+{{ "{% block title %}" }}
+{{ "{{ parent() }}" }} - Nuevo {{ entity_singularized }}
+{{ "{% endblock %}" }}
+
+{{ "{% block page_content %}" }}
+
+
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-9">
+
+
+
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Nuevo {{ entity_singularized }} <span class="glyphicon glyphicon-file" aria-hidden="true"></span> </h3>
+            </div>
+
+
+
+            {% include 'crud/views/others/flash_messages.html.twig.twig' %}
+
+            {{ "{{ form_start(form) }}" }}
+            <div class="box-body">
+                {{ "{{ form_widget(form) }}" }}
+            </div>
+            <div class="box-footer">
+                <button type="submit" name="submit" value="save" class="btn btn-primary"> 
+                    Guardar <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                </button>
+                <button type="submit" name="submit" value="saveAndAdd" class="btn btn-info"> 
+                    Guardar y Agregar <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+            </div>
+
+
+            {{ "{{ form_end(form) }}" }}
+
+            <hr/>
+            {% set hide_edit, hide_delete, hide_new = true, true, true %}
+            {% include 'crud/views/others/record_actions.html.twig.twig' %}
+        </div>
+
+    </div>
+</div>
+
+
+{{ "{% endblock %}" }}

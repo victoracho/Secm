@@ -1,0 +1,5 @@
+#services:
+    # ...
+    #test.file_uploader:
+    #    class: Fgimenez\TestBundle\FileUploader
+    #    arguments: ['%kernel.root_dir%/../web/uploads']

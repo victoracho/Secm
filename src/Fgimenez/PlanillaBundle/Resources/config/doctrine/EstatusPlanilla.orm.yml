@@ -1,0 +1,51 @@
+Fgimenez\PlanillaBundle\Entity\EstatusPlanilla:
+    type: entity
+    table: oac.estatus_documento
+    repositoryClass: Fgimenez\PlanillaBundle\Repository\EstatusPlanillaRepository
+
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        
+        id_documento:
+            type: integer            
+            nullable: false
+            
+        id_estatus:
+            type: integer            
+            nullable: false    
+
+        created:
+          type: datetime
+          gedmo:
+            timestampable:
+              on: create
+          options:
+             default: now()
+             
+        AnalistaAsignado:
+            type: string
+            length: 30
+            column: analista_asignado
+            nullable: true
+
+    manyToOne:
+        planilla:
+            targetEntity: Planilla
+            inversedBy: planilla_estatus            
+            joinColumn:
+                name: id_documento
+                referencedColumnName: id  
+                
+        estatus:
+            targetEntity: Estatus
+            inversedBy: EstatusPlanilla
+            joinColumn:
+                name: id_estatus
+                referencedColumnName: id  
+                
+                

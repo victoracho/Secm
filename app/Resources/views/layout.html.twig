@@ -1,0 +1,198 @@
+<!doctype html>
+<!--[if lt IE 7 ]><html lang="es" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]><html lang="es" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]><html lang="es" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]><html lang="es" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html lang="es" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta name="author" content="">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>{% block title %}
+            Prueba de Víctor González
+            {% endblock %}</title>
+
+        {# -------------------------------------------------------------------------------------------------- STYLESHEETS #}
+        {% block stylesheets %}
+            {#<link rel="stylesheet" href="{{ asset('bundles/avanzuadmintheme/static/'~ app.environment ~'/styles/admin-lte-all.css') }}" />#}
+            <link rel="stylesheet" href="{{ asset('bundles/organizaciones/css/static/estilos.css') }}" />
+            <link href="../css/froala_style.min.css" rel="stylesheet" type="text/css" />
+        {% endblock %}
+
+        {% block stylesheets_inline %}
+        {% endblock %}
+
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+        {# --------------------------------------------------------------------------------------------- JAVASCRIPTS_HEAD #}
+        {%  block javascripts_head %}
+            <script type="text/javascript" src="{{ asset('bundles/avanzuadmintheme/static/'~app.environment~'/scripts/modernizr.js') }}"></script>
+            <!--[if lt IE 9]>
+
+            <![endif]-->
+
+        {% endblock %}
+
+
+
+    </head>
+    <body class="{{ admin_skin|default('skin-blue')}}">
+
+        <div class="wrapper">
+
+            {% block avanzu_admin_header %}
+                <header class="main-header">
+                    {% block avanzu_logo %}
+                        <a href="#" class="logo">
+                            <!-- Add the class icon to your logo image or logo icon to add the margining -->
+                            {#{ block('title') }#}
+                            <!--<IMG SRC="/bundles/organizaciones/img/logo-menu1.png"  HEIGHT="55">-->
+                            <IMG SRC="/bundles/organizaciones/img/logo-menu3.png"  HEIGHT="45">
+
+                        </a>
+                    {% endblock %}
+                    <!-- Header Navbar: style can be found in header.less -->
+                    <nav class="navbar navbar-static-top" role="navigation">
+                        <!-- Sidebar toggle button-->
+                        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                            <span class="sr-only">Toggle navigation</span>
+
+                        </a>
+
+                        <span style="font-family:Arial; font-size: 28px; color:#FFFFFF">&nbsp;&nbsp; prueba de Víctor González</span>
+
+
+
+                        {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <div class="navbar-custom-menu">
+                                <ul class="nav navbar-nav">
+                                    {% block avanzu_navbar %}
+                                        {{ render(controller('AvanzuAdminThemeBundle:Navbar:messages')) }}
+                                        {{ render(controller('AvanzuAdminThemeBundle:Navbar:notifications')) }}
+                                        {{ render(controller('AvanzuAdminThemeBundle:Navbar:tasks')) }}
+                                        {{ render(controller('AvanzuAdminThemeBundle:Navbar:user')) }}
+                                    {% endblock %}
+
+
+
+
+                                    {% if app.user %}
+
+
+                                         <li>
+                                            <a>
+                                               {{ "now"|date("d/m/Y") }}
+                                            </a>
+                                        </li>
+                                        <li> <!--Muestra el usuario en el borde superior derecho-->
+                                            <a href="#">
+                                                <i class="fa fa-user" aria-hidden="true"></i> {{ app.user.username }}
+                                            </a>
+                                        </li>
+
+                                        {#<li>
+                                            <a href="{{ path('fos_user_security_logout') }}">
+                                                <i class="fa fa-sign-out" aria-hidden="true"></i> {#{{ 'menu.logout'|trans }}
+                                            </a>
+                                        </li>#}
+
+                                        <li>
+                                            <a href="{{ path('user_security_salir') }}">
+                                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                    {% else %}
+
+                                        <li>
+                                            <a href="{{ path('fos_user_security_login') }}">
+                                                <i class="fa fa-user-o" aria-hidden="true"></i> Login
+                                            </a>
+                                        </li>
+
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </nav>
+                </header>
+            {% endblock %}
+
+            <!-- Left side column. contains the logo and sidebar -->
+            <aside class="main-sidebar sidebar-offcanvas">
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar">
+                  {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
+                    {% block avanzu_sidebar %}
+
+                            {{ render(controller('AvanzuAdminThemeBundle:Sidebar:userPanel')) }}
+                            {#{ render(controller('AvanzuAdminThemeBundle:Sidebar:searchForm')) }#}
+
+                            <br>
+
+                        {{ render(controller('AvanzuAdminThemeBundle:Sidebar:menu', {'request':app.request})) }}
+                    {% endblock %}
+
+                    <div class="user-panel, text-center">
+
+                        <span style="color: #d9edf7; font-size: 18px"><strong>Bienvenido</strong></span>
+
+                        {#<span style="color: #03c6fb; font-size: 16px"><i class="fa fa-user" aria-hidden="true">&nbsp;<span style="font-family:Arial">{{ app.user.username}}</span></i></span>#}
+                        <hr  class="box">
+
+                    </div>
+
+                   {{ render(controller('dmanriqueUsuarioBundle:Default:menu')) }}
+                   {% endif %}
+                </section>
+                <!-- /.sidebar -->
+            </aside>
+
+            <!-- Right side column. Contains the navbar and content of the page -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>
+                        {#{% block page_title %}Sistema de Registros de Requerimientos{% endblock %}#}
+                       <!--<small>{% block page_subtitle %}Control panel{% endblock %}</small>-->
+                    </h1>
+                    {% block avanzu_breadcrumb %}
+                        {{ render(controller('AvanzuAdminThemeBundle:Breadcrumb:breadcrumb', {'request':app.request, 'title' : block('page_title')})) }}
+                    {% endblock %}
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                {% block page_content %}{% endblock %}
+            {% block fos_user_content %}{% endblock %}
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    {% block avanzu_admin_footer %}
+        <!-- <footer class="main-footer">
+             <div class="pull-right hidden-xs">
+                 <b>Version</b> 2.0
+             </div>
+             <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
+         </footer>-->
+    {% endblock %}
+
+</div>
+<!-- ./wrapper -->
+
+{# ------------------------------------------------------------------------------------------------------ JAVASCRIPTS #}
+{% block javascripts %}
+
+    <script src="{{ asset('bundles/avanzuadmintheme/static/'~app.environment~'/scripts/admin-lte-all.js') }}"></script>
+
+{% endblock %}
+
+{# ----------------------------------------------------------------------------------------------- JAVASCRIPTS_INLINE #}
+{% block javascripts_inline %}
+
+{% endblock %}
+</body>
+</html>

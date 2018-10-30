@@ -1,0 +1,89 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Editar planilla
+{% endblock %}
+
+{% block page_content %}
+
+
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+
+            <div class="box box-warning">
+                <div class="box-header with-border">
+                    <span class="glyphicon glyphicon-file" aria-hidden="true"></span> <h3 class="box-title">Editar Caso {{planilla.codigo}}</h3>
+                    
+                </div>
+
+                {#<div class="row">
+                    <div class="col-md-12">
+                        {% for type, flashMessages in app.session.flashbag.all() %}
+                            {% for flashMessage in flashMessages %}
+                                <div class="alert alert-{{ type }}">
+                                    {{ flashMessage|raw }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>#}
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                                <div class="alert alert-warning">
+                                   El caso {{planilla.codigo}} se encuentra en Estatus {{planilla.UltimoStatus.nombre}} solo podrá editar Soportes Documentales
+                                </div>
+                           
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="col-md-12">           <!-- Custom Tabs -->
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tab_1" data-toggle="tab">Soportes Documentales</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1">
+                                    
+                                    {{ render(controller('FgimenezDocumentoBundle:DocumentoInterfaz:nuevo', { 'enlace':{'id': planilla.id,'entidad': 'FgimenezPlanillaBundle:Planilla','ruta': '/documento_soporte/' ~ planilla.codigo } })) }}
+                                </div>
+
+                            </div>
+                            <!-- /.tab-content -->
+                        </div>
+                        <!-- nav-tabs-custom -->
+                    </div>
+                </div>
+
+                <hr/>
+
+
+                <div class="form-group">
+                    {%if origen=='procesar'%}
+                        <a class="btn btn-default" href="{{ path('planilla') }}">
+                            <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                            Volver al listado
+                        </a>
+                    {%endif%}
+                   
+                    {%if origen=='remitir'%}
+                        <a class="btn btn-default" href="{{ path('planilla_index_remitir') }}">
+                            <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                            Volver al listado
+                        </a>
+                    {%endif%}
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+

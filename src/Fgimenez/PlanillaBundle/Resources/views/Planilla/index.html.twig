@@ -1,0 +1,329 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Documento
+{% endblock %}
+
+{% block page_content %}
+
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <div class="box box-primary">
+
+                <div class="box-header with-border">
+
+                    <h3 class="box-title">Bandeja de Entrada </h3>
+                </div>               
+
+                <!-- FILTERING -->
+                <div class="col-md-12">
+                    <div  id="filters" class="collapse">
+
+                        <form class="well" action="{{ path('planilla') }}" method="get" >
+                            <div class="row">
+
+                                <div class="col-md-2">{{ form_row(filterForm.codigo) }}</div>
+
+                                <div class="col-md-2">{{ form_row(filterForm.ultimo_status) }}</div>
+
+                                <div class="col-md-2">{{ form_row(filterForm.tipo_caso) }}</div>
+
+                                <div class="col-md-2">{{ form_row(filterForm.tipo_atencion) }}</div>
+
+                                {# <div class="col-md-6">
+                                     {{ form_rest(filterForm) }}
+                                 </div>#}
+                                <br>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-warning" name="filter_action" value="filter"> <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtrar</button>
+                                        <button type="submit" class="btn btn-default" name="filter_action" value="reset"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Limpiar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- END FILTERING -->
+
+
+                <div class="col-md-3 pull-left">
+
+                    <!-- PAGE SIZE -->
+                    <div class="pagination form-inline ">
+                        <select class = "form-control"  onchange="window.location = this.value" >
+                            <option value='{{ path('planilla', app.request.query.all|merge({'pcg_show': '5'})) }}, "planilla"' {% if app.request.get('pcg_show') == 5 %} selected {% endif %}>5</option>
+                            <option value='{{ path('planilla', app.request.query.all|merge({'pcg_show': '10'})) }}, "planilla"' {% if app.request.get('pcg_show') == 10 %} selected {% endif %}>10</option>
+                            <option value='{{ path('planilla', app.request.query.all|merge({'pcg_show': '20'})) }}, "planilla"' {% if app.request.get('pcg_show') == 20 %} selected {% endif %}>20</option>
+                            <option value='{{ path('planilla', app.request.query.all|merge({'pcg_show': '50'})) }}, "planilla"' {% if app.request.get('pcg_show') == 50 %} selected {% endif %}>50</option>
+                            <option value='{{ path('planilla', app.request.query.all|merge({'pcg_show': '100'})) }}, "planilla"' {% if app.request.get('pcg_show') == 100 %} selected {% endif %}>100</option>
+                            <option value='{{ path('planilla', app.request.query.all|merge({'pcg_show': '500'})) }}, "planilla"' {% if app.request.get('pcg_show') == 500 %} selected {% endif %}>500</option>
+                        </select>
+                    </div>
+                    <!-- END PAGE SIZE -->
+
+                </div>
+
+                <div class="col-md-6">
+
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <a class="btn btn-primary h3 pull-right" href="{{ path('planilla_new') }}" style="margin-bottom:10px">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuevo
+                    </a>
+                    <a class="btn btn-default dropdown-toggle pull-right h3" data-toggle="collapse" data-target="#filters">
+                        Filtro
+                        <span class="caret"></span>
+                    </a>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        {% for type, flashMessages in app.session.flashbag.all() %} 
+                            {% for flashMessage in flashMessages %}
+                                <div class="alert alert-{{ type }}">
+                                    {{ flashMessage|raw }}
+                                </div>
+                            {% endfor %} 
+                        {% endfor %} 
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="table-responsive col-md-12 text-center">
+                        <div class="col-md-1">
+                            {# Por Asignar#}
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="Caso registrado pendiente por culminar información">
+                                <strong>Creado</strong>
+                            </span>
+                        </div>
+
+                        <div class="col-md-1 bg-warning">
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="Caso asignado por el supervisor pendiente por iniciar valoración">
+                                <strong>Asignado<br>&nbsp;</strong>
+                            </span>
+                        </div>
+                        <div class="col-md-1 bg-success">
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="Proceso de valoración del caso iniciado">
+                                <strong>Iniciado<br> Valoraci&oacute;n</strong>
+                            </span>
+                        </div>
+                        <div class="col-md-2 bg-danger">
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="Se inició el proceso de valoración del caso hace 3 días o más">
+                                <strong>Iniciado Valoraci&oacute;n <br>3 días ó más</strong>
+                            </span>
+                        </div>
+                        <div class="col-md-1 bg-info">
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="El caso ha sido valorado">
+                                <strong>Valorado<br>&nbsp;</strong>
+                            </span>
+                        </div>
+                        <div class="col-md-1 bg-danger">
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="Debe realizar correcciones al caso según lo indicado por el supervisor">
+                                <strong>Corregir<br> Valoración</strong>
+                            </span>
+                        </div>
+                        <div class="col-md-1 bg-info">
+                            <span  data-tooltip aria-haspopup="true" class="has-tip" title="El supervisor ha evaluado el caso y esta listo para remitir">
+                                <strong>Evaluado<br>&nbsp;</strong>
+
+                            </span>
+                        </div>
+                        <div class="col-md-1 bg-info">
+                            <span data-tooltip aria-haspopup="true" class="has-tip" title="El caso ha sido remitido a la Dirección u Órgano correspondiente">
+                                <strong>Remitido<br>&nbsp;</strong>
+
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="table-responsive col-md-12">
+
+
+
+
+                        <div class="box">
+                            <div class="box-header">
+                                {#<h3 class="box-title">Registros</h3>#}
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+
+                                <form method="POST" id="bulk_form" action="{{ path('planilla_bulk_action') }} ">
+                                    <table id="example2" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                {#<th width="20px"><input type="checkbox" class="check-all" onclick="toggleAll(this)"></th>#}
+
+                                                {% import "PetkoparaCrudGeneratorBundle::macros/th_sortable.html.twig" as macros %}
+                                                {#<th>{{macros.th_sortable('id',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla')}}</th>#}
+                                                <th>{{macros.th_sortable('idTipo',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla','tipo caso')}}</th>
+                                                <th>{{macros.th_sortable('codigo',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla','código')}}</th>
+                                                <!--<th>{#{macros.th_sortable('hecho',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla')}#}</th>-->
+                                                <th>{{macros.th_sortable('MecanismoPresentacion',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla', 'Mecanismo Presentación')}}</th>
+                                                    {#<th>{{macros.th_sortable('fechaHecho',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla')}}</th>#}
+                                                <th>{{macros.th_sortable('ultimo_status',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla','estatus')}}</th>
+
+                                                <th>{{macros.th_sortable('fechaUltimoStatus',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla','fecha estatus')}}</th>
+
+                                                {# <th>{{macros.th_sortable('valoracion',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla')}}</th>
+                                                     <th>{{macros.th_sortable('updated',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla')}}</th>
+                                                     <th>{{macros.th_sortable('created',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'planilla')}}</th>#}
+                                                <th width = "130px">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {% for planilla in planillas %}
+                                                {% set indice=loop.index-1%}
+                                                {%if planilla.UltimoStatus.id==1%}
+                                                    <tr class="default">
+                                                    {%endif%}
+                                                    {%if planilla.UltimoStatus.id==3%}
+                                                    <tr class="warning">
+                                                    {%endif%}
+                                                    {%if planilla.UltimoStatus.id==4%}
+
+                                                        {%if  excedido[indice]=='si'%}
+                                                        <tr class="danger">
+                                                        {%else%}
+                                                        <tr class="success">
+                                                        {%endif%}
+
+                                                    {%endif%}
+                                                    {%if planilla.UltimoStatus.id==5 or planilla.UltimoStatus.id==7 or planilla.UltimoStatus.id==8%}
+                                                    <tr class="info">
+                                                    {%endif%}
+                                                    {%if planilla.UltimoStatus.id==6%}
+                                                    <tr class="danger">
+                                                    {%endif%}
+                                                    
+                                                    {#<td><input type="checkbox" name="ids[]" onclick='bulkSubmitBtnManage();' class="check-all" value="{{planilla.id}}"/></td>#}
+                                                    {#<td><a href="{{ path('planilla_edit', { 'id': planilla.id }) }}">{{ planilla.id }}</a></td>#}
+                                                    <td>{%- if planilla.idTipo %}{{ planilla.TipoCaso.nombre }}{% endif %}</td>
+                                                    <td>{{ planilla.codigo }}</td>
+                                                    <td>{%- if planilla.MecanismoPresentacion %}{{ planilla.TipoAtencion.nombre }}{% endif %}</td>
+                                                    <!--<td>{#{ planilla.hecho }#}</td>-->
+                                                    {#<td>{%- if planilla.fechaHecho %}{{ planilla.fechaHecho|date('Y-m-d') }}{% endif %}</td>#}
+                                                    <td>{{planilla.UltimoStatus.nombre | title}}</td>
+                                                    <td>{%- if planilla.fechaUltimoStatus %}{{ planilla.fechaUltimoStatus|date('Y-m-d') }}{% endif %}</td>
+
+
+                                                    {#<td>{{ planilla.valoracion }}</td>
+                                                    <td>{%- if planilla.updated %}{{ planilla.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                                    <td>{%- if planilla.created %}{{ planilla.created|date('Y-m-d H:i:s') }}{% endif %}</td>#}
+
+                                                    <td class="actions">
+                                                        {#<a  onclick="return confirm('Are you sure!');" title="Delete" class="btn btn-danger btn-sm" href="{{ path('planilla_by_id_delete', { 'id': planilla.id}) }}">
+                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                        </a>#}
+                                                        <a title='Ver' class="btn btn-info btn-sm" href="{{ path('planilla_show', { 'id': planilla.id, 'origen':'crear' }) }}">
+                                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                                        </a>
+                                                        {%if planilla.UltimoStatus.id==1%}
+                                                            <a  title='Editar' class="btn btn-primary btn-sm" href="{{ path('planilla_edit', { 'id': planilla.id }) }}">
+                                                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                                            </a>
+                                                        {%endif%}
+                                                        {%if planilla.UltimoStatus.id>2 and planilla.UltimoStatus.id<8 %}
+                                                            <a  title='Agregar Soportes' class="btn btn-microsoft btn-sm" href="{{ path('planilla_agregar_soportes', { 'id': planilla.id, 'origen':'procesar' }) }}">
+                                                                <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+                                                            </a>
+                                                        {%endif%}
+                                                        {%if planilla.UltimoStatus.id==3 %}
+                                                            <a  title='Iniciar Valoración' class="btn btn-warning btn-sm" onclick="return confirm('¿Está seguro que desea iniciar la valoración?');" href="{{ path('planilla_iniciar_valoracion', { 'id': planilla.id }) }}">
+                                                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                                                            </a>
+                                                        {%endif%}
+                                                        {%if planilla.UltimoStatus.id==4 %}
+
+                                                            {%if planilla.PlanillaValoracionOAC %}
+
+                                                                <a  title='Editar' class="btn btn-success btn-sm" href="{{ path('valoracionoac_edit', {'id':planilla.PlanillaValoracionOAC.id}) }}">
+                                                                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                                                                </a>
+                                                            {%else%}  
+
+                                                                <a  title='Valorar' class="btn btn-success btn-sm" href="{{ path('valoracionoac_new', {'planilla':planilla.id}) }}">
+                                                                    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                                                                </a>
+                                                            {%endif%}
+                                                        {%endif%}
+                                                        {%if planilla.UltimoStatus.id==6 %}
+                                                            <a  title='Editar' class="btn btn-success btn-sm" href="{{ path('valoracionoac_edit', {'id':planilla.PlanillaValoracionOAC.id}) }}">
+                                                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                                                            </a>
+                                                        {%endif%}
+                                                        
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+
+                                    </table>
+                                </form>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+
+                    </div>
+
+                </div>           
+
+
+
+
+
+                <div class="row">
+                    <div class="col-md-4 pull-left">
+                        {# <div class="pagination form-inline ">
+                             <select class = "form-control" name="bulk_action" >
+                                 <option value="">--Choose--</option>
+                                 <option value="delete">DELETE</option>
+                             </select>
+                             <input type="submit" id='bulkSubmitBtn' form="bulk_form" class="form-control btn btn-danger btn-sm" disabled>
+                         </div> #}
+                    </div>
+
+                    <div class="col-md-12 text-center">
+                        {{ pagerHtml|raw }} 
+                    </div>
+                </div> <!-- /#bottom -->
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts_inline %}
+    <script>
+        $(function () {
+            $('#example2').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": false,
+                "autoWidth": true,
+                "order": [[4, "desc"]],
+                "language": {
+                    //"info": "Mostrando la página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "emptyTable": " "
+                }
+            });
+        });
+    </script>
+{% endblock %}
+

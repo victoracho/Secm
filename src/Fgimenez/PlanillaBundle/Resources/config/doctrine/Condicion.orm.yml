@@ -1,0 +1,16 @@
+Fgimenez\PlanillaBundle\Entity\Condicion:
+    type: entity
+    table: generico.condicion
+    repositoryClass: Fgimenez\PlanillaBundle\Repository\CondicionRepository
+
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        nombre:
+            type: string
+            length: 255
+            unique: true

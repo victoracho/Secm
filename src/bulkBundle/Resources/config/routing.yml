@@ -1,0 +1,16 @@
+
+bulk_homepage:
+    path:     /
+    defaults: { _controller: bulkBundle:Default:index }
+
+bulk_enviar:
+    path:     /enviar/{name}
+    defaults: { _controller: bulkBundle:prueba:enviar }
+
+bulk_prueba:
+    path:     /prueba
+    defaults: { _controller: bulkBundle:prueba:prueba }
+
+bulk_pruebas:
+    path:     /pruebas
+    defaults: { _controller: bulkBundle:prueba:pruebas }

@@ -1,0 +1,23 @@
+adminBundle\Entity\biblioteca_categoria:
+    type: entity
+    table: intranet.biblioteca_categoria
+    repositoryClass: adminBundle\Repository\biblioteca_categoriaRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        nombre:
+            type: string
+            length: 255
+        activo:
+            type: smallint
+
+    oneToMany:
+        biblioteca:
+            targetEntity: biblioteca
+            mappedBy: biblioteca_categoria
+
+    lifecycleCallbacks: {  }

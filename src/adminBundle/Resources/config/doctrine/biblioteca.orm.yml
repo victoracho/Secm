@@ -1,0 +1,39 @@
+adminBundle\Entity\biblioteca:
+    type: entity
+    table: intranet.biblioteca
+    repositoryClass: adminBundle\Repository\bibliotecaRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        nombre:
+            type: string
+            length: 255
+        descripcion:
+            type: string
+            length: 255
+        fecha:
+            type: datetime
+        activo:
+            type: smallint
+
+        brochure:
+            properties:
+                file:
+                    - File:
+                         maxSize: 50M
+                         mimeTypes: [application/pdf, application/x-pdf]
+                         mimeTypesMessage: Por favor carga un pdf válido
+    manyToOne:
+      biblioteca_categoria:
+            targetEntity: biblioteca_categoria
+            inversedBy: biblioteca
+            joinColumn:
+                name: idCategoria
+                referencedColumnName: id
+
+
+    lifecycleCallbacks: {  }

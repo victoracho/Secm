@@ -1,0 +1,141 @@
+Unidad de Arquitectura Unix
+
+Procedimiento básico para trabajar con almacenamiento en SuSE Linux (entre otras distribuciones) y LVM
+
+Jerarquía LVM
+----------------------------------------------
+
+LVM -> PV -> VG -> LV -> FS
+
+Conceptos
+----------------------------------------------
+- Logical Volume Manager (LVM):  Gestor de Volúmenes Lógicos permite incrementar volúmenes dinámicamente
+- Physical Volume (PV): Tipo de particion especial para trabajar con LVM. Un PV puede ser un disco entero (crudo) o una partición de un disco.
+- Volume Group (VG): Entidad que agrupa el espacio de los PV agregados. El tamaño del VG será la suma de los tamaños de los PV agregados a él. Un VG puede contener uno o más PV. 
+- Logical Volume (LV): Cuota de espacio tomada del VG para crear un FileSystem. Un LV puede estar contenido en uno, o entre varios discos (PV) dependiendo del espacio, la forma y el orden de su creación. En un VG puede haber uno o más LV.
+- FileSystem: Literalmente sistema de archivos, se refiere a la manera en que el sistema "escribirá" los datos en el disco, también indica el tipo de formato que mantendrá el volumen lógico para crear archivos en él.
+
+----------------------------------------------
+Tópicos
+
+1.- Descubrir discos (SAN o VMWare)
+2.- Crear Physical Volumes
+3.- Crear Volume Groups
+4.- Incrementar Volume Groups
+5.- Crear Logical Volumes
+6.- Incrementar Logical Volumes
+7.- Crear FileSystems
+8.- Incrementar FileSystems
+
+
+1) Antes que nada, se debe ver cuáles discos se ven actualmente, para ello los listamos con:
+
+# fdisk -l | grep "Disk /dev"
+
+Podemos copiar esta salida a un archivo de texto para después comparar.
+
+Para descubrir discos en Linux, ya sea un servidor físico conectado a SAN o uno virtual con VMWare, al saber que ya se han asignado nuevos discos se debe escanear el bus SCSI. Para ello en el sysfs (/sys) existen unos objetos del kernel que permiten realizar esta tarea. Para ver estos objetos basta con listar el directorio correspondiente:
+
+# ls /sys/class/scsi_host/hostX <- Puede haber varias carpetas depende los bus scsi en el servidor.
+
+Como puede haber varios bus scsi en el servidor, procuremos escanear todo:
+
+# for BUS in $(ls -1 /sys/class/scsi_host/); do echo "- - -" > /sys/class/scsi_host/$BUS/scan; done
+
+Volvemos a listar los discos para ver la diferencia:
+
+fdisk -l | grep "Disk /dev"
+
+
+2) Una vez que se han identificado los nuevos discos, se debe crear el PV:
+
+# pvcreate /dev/nombre_disco
+
+Donde "nombre_disco" es el que se ha identificado previamente. Cuando se trata de discos SAN, que provienen de otros servidores, pudieran tener una partición que no es LVM y al intentar crear el PV puede fallar. Es necesario en ese caso borrar la partición antes de crear el PV:
+
+# fdisk /dev/nombre_disco
+- presionar "p" y ENTER para ver la(s) partición(es)
+- presionar "d" y ENTER para borrar una partición
+- presionar "p" y ENTER para ver que la partición se ha borrado
+- presionar "w" para guardar y salir
+
+Posterior a esto ya podremos crear el PV con pvcreate. Una vez creados listar los PV asi:
+
+# pvs
+
+Y deberíamos ver el nuevo PV
+
+3) Para crear un VG debemos saber bien cuáles PV se usarán, éstos últimos no deben formar parte de otro VG. Al hacer un "pvs" veremos algunos PV que no tienen VG asignado. Ya identificados ejecutamos lo siguiente:
+
+# vgcreate vg_ejemplo /dev/sdh /dev/sdj
+
+Para crear VG debemos procurar utilizar la nomenclatura vg_nombre, donde "nombre" será la palabra que identifique la utilidad que se dará a este espacio.
+
+Al final, ya deberíamos ver nuestro VG entre los demás VG del sistema:
+
+# vgs
+
+4) Para incrementar un VG, se debe agregar otro disco (PV) para lo cual, ejecutaríamos los pasos 1 y 2 de ser necesarios y luego  lo siguiente:
+
+# vgextend vg_nombre /dev/nuevo_disco
+
+5) Para crear un LV, se debe revisar que el VG donde lo crearemos cuente con suficiente espacio, para ello listamos los VG:
+
+# vgs
+
+Una vez identificado nuestro VG, crearemos el LV con lo siguiente:
+
+# lvcreate -L 10G -n lv_nombre vg_seleccionado
+
+Para los tamaños usaremos letras mayúsculas 512M, 10G, 2T. con la opción -n indicamos el nombre, usaremos la nomenclatura lv_nombre donde "nombre" puede hacer referencia al FS que se montará sobre él, y al final de la línea el VG donde crearemos el respectivo LV.
+
+Ya creado, lo podremos ver con:
+
+# lvs
+
+6) Para incrementar un LV, debemos asegurarnos que el VG donde se encuentra dicho LV tiene suficiente espacio libre. Para identificar donde esta nuestro LV:
+
+# lvs
+
+Para saber si hay espacio en el VG:
+
+# vgs
+
+Una vez con esa información, procedemos a incrementar el LV:
+
+# lvextend -L +2G /dev/vg_nombre/lv_nombre
+
+7) Para crear un FS, ya debemos tener recién creado nuestro LV. Una vez identificado el correspondiente LV, procedemos como sigue:
+
+# mkfs.ext3 /dev/vg_nombre/lv_nombre
+
+ATENCIÓN: Este procedimiento formatea el LV, si seleccionamos mal el LV, podríamos perder información.
+
+Posterior a esto, debemos contar con un punto de montura para nuestro FS, por lo que deberemos crearlo:
+
+# mkdir /ruta/donde/montar
+
+Ya con esto lo podríamos montar:
+
+# mount  /dev/vg_nombre/lv_nombre  /ruta/donde/montar
+
+De ser necesario que el FS se monte automáticamente al iniciar el Sistema Operativo, deberemos agregarlo al fstab:
+
+# vi /etc/fstab
+
+Y añadir una línea como la siguiente:
+
+/dev/vg_nombre/lv_nombre	/ruta/donde/montar	ext3	acl,user_xattr	1	2
+
+Guardar el archivo y cerrar. Se puede probar que quedó bien haciendo un:
+
+# mount -a
+
+El cual lee el archivo fstab y monta los respectivos FS.
+
+8) Para incrementar un FS, debemos haber incrementado primero el LV donde esta alojado. Una vez hecho esto, y dependiendo el tipo de FS (formato) y las aplicaciones que lo usan, lo podríamos aumentar en caliente o tal vez debamos desmontarlo antes.
+
+Para aumentarlo en caliente:
+
+# resize2fs /dev/vg_nombre/lv_nombre
+

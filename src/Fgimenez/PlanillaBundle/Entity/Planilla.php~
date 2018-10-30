@@ -1,0 +1,915 @@
+<?php
+
+namespace Fgimenez\PlanillaBundle\Entity;
+
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Timestampable;
+use Mmartin4\MantenimientoBundle\Mmartin4MantenimientoBundle;
+
+/**
+ * Planilla
+ * @ORM\Entity
+ * @UniqueEntity("codigo")
+ */
+class Planilla {
+
+    /**
+     * @var int
+     */
+    private $id;
+
+    /**
+     * @var int
+     */
+    private $idTipo;
+
+    /**
+     * @var string
+     */
+    private $codigo;
+
+    /**
+     * @var string
+     * @Assert\Regex(
+     *     pattern="/[-.´*+?¿µ^${}()|!#%&=¡¨_½:;,°¬@·~¸`\[\]\/\\]/",
+     *     match=false,
+     *     message= "El campo hecho no puede contener caracteres especiales."
+     * ),
+     *
+     * @Assert\NotBlank(),
+     * 
+     * @Assert\NotNull()
+     */
+    private $hecho;
+
+    /**
+     * @var string
+     */
+    private $valoracion;
+
+    /**
+     * @var integer
+     */
+    private $estado;
+
+    /**
+     * @var integer
+     */
+    private $municipio;
+
+    /**
+     * @var integer
+     */
+    private $parroquia;
+
+    /**
+     * @var integer
+     */
+    private $naturaleza;
+
+    /**
+     * @var integer
+     */
+    private $condicion;
+
+    /**
+     * @var string
+     * @Assert\Regex(
+     *     pattern="/[-.´*+?¿µ^${}()|!#%&=¡¨_½:;,°¬@·~¸`\[\]\/\\]/",
+     *     match=false,
+     *     message= "El campo no puede contener caracteres especiales."
+     * ),
+     *
+     * @Assert\NotBlank(),
+     * 
+     * @Assert\NotNull()
+     */
+    private $sustento;
+    
+    /**
+     * @var string
+     */
+    private $solicitud;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * Set idTipo
+     *
+     * @param integer $idTipo
+     *
+     * @return Planilla
+     */
+    public function setIdTipo($idTipo) {
+        $this->idTipo = $idTipo;
+
+        return $this;
+    }
+
+    /**
+     * Get idTipo
+     *
+     * @return int
+     */
+    public function getIdTipo() {
+        return $this->idTipo;
+    }
+
+    /**
+     * Set codigo
+     *
+     * @param string $codigo
+     *
+     * @return Planilla
+     */
+    public function setCodigo($codigo) {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return string
+     */
+    public function getCodigo() {
+        return $this->codigo;
+    }
+
+    /**
+     * Set hecho
+     *
+     * @param string $hecho
+     *
+     * @return Planilla
+     */
+    public function setHecho($hecho) {
+        $this->hecho = $hecho;
+
+        return $this;
+    }
+
+    /**
+     * Get hecho
+     *
+     * @return string
+     */
+    public function getHecho() {
+        return $this->hecho;
+    }
+
+    /**
+     * Set valoracion
+     *
+     * @param string $valoracion
+     *
+     * @return Planilla
+     */
+    public function setValoracion($valoracion) {
+        $this->valoracion = $valoracion;
+
+        return $this;
+    }
+
+    /**
+     * Get valoracion
+     *
+     * @return string
+     */
+    public function getValoracion() {
+        return $this->valoracion;
+    }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $documentos;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->documentos = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * @var \Fgimenez\PlanillaBundle\Entity\TipoCaso
+     */
+    private $tipo_caso;
+
+    /**
+     * Set tipoCaso
+     *
+     * @param \Fgimenez\PlanillaBundle\Entity\TipoCaso $tipoCaso
+     *
+     * @return Planilla
+     */
+    public function setTipoCaso(\Fgimenez\PlanillaBundle\Entity\TipoCaso $tipoCaso = null) {
+        $this->tipo_caso = $tipoCaso;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCaso
+     *
+     * @return \Fgimenez\PlanillaBundle\Entity\TipoCaso
+     */
+    public function getTipoCaso() {
+        return $this->tipo_caso;
+    }
+
+    /**
+     * Add documento
+     *
+     * @param \Fgimenez\DocumentoBundle\Entity\Documento $documento
+     *
+     * @return Planilla
+     */
+    public function addDocumento(\Fgimenez\DocumentoBundle\Entity\Documento $documento) {
+        $this->documentos[] = $documento;
+
+        return $this;
+    }
+
+    /**
+     * Remove documento
+     *
+     * @param \Fgimenez\DocumentoBundle\Entity\Documento $documento
+     */
+    public function removeDocumento(\Fgimenez\DocumentoBundle\Entity\Documento $documento) {
+        $this->documentos->removeElement($documento);
+    }
+
+    /**
+     * Get documentos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDocumentos() {
+        return $this->documentos;
+    }
+
+
+    /**
+     * @var integer
+     */
+    private $MecanismoPresentacion;
+
+    /**
+     * @var \Fgimenez\PlanillaBundle\Entity\TipoAtencion
+     */
+    private $tipo_atencion;
+
+    /**
+     * Set MecanismoPresentacion
+     *
+     * @param integer $MecanismoPresentacion
+     *
+     * @return Planilla
+     */
+    public function setMecanismoPresentacion($MecanismoPresentacion) {
+        $this->MecanismoPresentacion = $MecanismoPresentacion;
+
+        return $this;
+    }
+
+    /**
+     * Get MecanismoPresentacion
+     *
+     * @return integer
+     */
+    public function getMecanismoPresentacion() {
+        return $this->MecanismoPresentacion;
+    }
+
+    /**
+     * Set tipoAtencion
+     *
+     * @param \Mmartin4\MantenimientoBundle\Entity\Mecanismo_Presentacion $tipoAtencion
+     *
+     * @return Planilla
+     */
+    public function setTipoAtencion(\Mmartin4\MantenimientoBundle\Entity\Mecanismo_Presentacion $tipoAtencion = null) {
+        $this->tipo_atencion = $tipoAtencion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoAtencion
+     *
+     * @return \Mmartin4\MantenimientoBundle\Entity\Mecanismo_Presentacion
+     */
+    public function getTipoAtencion() {
+        return $this->tipo_atencion;
+    }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $planilla_estatus;
+
+    /**
+     * Add planillaEstatus
+     *
+     * @param \Fgimenez\PlanillaBundle\Entity\EstatusPlanilla $planillaEstatus
+     *
+     * @return Planilla
+     */
+    public function addPlanillaEstatus(\Fgimenez\PlanillaBundle\Entity\EstatusPlanilla $planillaEstatus) {
+        $this->planilla_estatus[] = $planillaEstatus;
+
+        return $this;
+    }
+
+    /**
+     * Remove planillaEstatus
+     *
+     * @param \Fgimenez\PlanillaBundle\Entity\EstatusPlanilla $planillaEstatus
+     */
+    public function removePlanillaEstatus(\Fgimenez\PlanillaBundle\Entity\EstatusPlanilla $planillaEstatus) {
+        $this->planilla_estatus->removeElement($planillaEstatus);
+    }
+
+    /**
+     * Get planillaEstatus
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPlanillaEstatus() {
+        return $this->planilla_estatus;
+    }
+
+    /**
+     * @var \DateTime $fechaUltimoStatus
+     *
+     * @Gedmo\Timestampable(on="change", field="ultimoStatus")
+     * @ORM\Column(type="datetime")
+     */
+    private $fechaUltimoStatus;
+
+
+    /**
+     * Get fechaUltimoStatus
+     *
+     * @return \DateTime
+     */
+    public function getFechaUltimoStatus() {
+        return $this->fechaUltimoStatus;
+    }
+
+    /**
+     * @var \DateTime
+     */
+    private $fechaHecho;
+
+    /**
+     * Set fechaHecho
+     *
+     * @param \DateTime $fechaHecho
+     *
+     * @return Planilla
+     */
+    public function setFechaHecho($fechaHecho) {
+        $this->fechaHecho = $fechaHecho;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaHecho
+     *
+     * @return \DateTime
+     */
+    public function getFechaHecho() {
+        return $this->fechaHecho;
+    }
+
+    /**
+     * @var \DateTime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    private $created;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    private $updated;
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     *
+     * @return Planilla
+     */
+    public function setCreated($created) {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated() {
+        return $this->created;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \DateTime $updated
+     *
+     * @return Planilla
+     */
+    public function setUpdated($updated) {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime
+     */
+    public function getUpdated() {
+        return $this->updated;
+    }
+
+    /**
+     * Set fechaUltimoStatus
+     *
+     * @param \DateTime $fechaUltimoStatus
+     *
+     * @return Planilla
+     */
+    public function setFechaUltimoStatus($fechaUltimoStatus) {
+        $this->fechaUltimoStatus = $fechaUltimoStatus;
+
+        return $this;
+    }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $planilla_involucrado;
+
+    /**
+     * Add planillaInvolucrado
+     *
+     * @param \jsanchez\InvolucradosBundle\Entity\Involucrados $planillaInvolucrado
+     *
+     * @return Planilla
+     */
+    public function addPlanillaInvolucrado(\jsanchez\InvolucradosBundle\Entity\Involucrados $planillaInvolucrado) {
+        $this->planilla_involucrado[] = $planillaInvolucrado;
+
+        return $this;
+    }
+
+    /**
+     * Remove planillaInvolucrado
+     *
+     * @param \jsanchez\InvolucradosBundle\Entity\Involucrados $planillaInvolucrado
+     */
+    public function removePlanillaInvolucrado(\jsanchez\InvolucradosBundle\Entity\Involucrados $planillaInvolucrado) {
+        $this->planilla_involucrado->removeElement($planillaInvolucrado);
+    }
+
+    /**
+     * Get planillaInvolucrado
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPlanillaInvolucrado() {
+        return $this->planilla_involucrado;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param integer $estado
+     *
+     * @return persona
+     */
+    public function setEstado($estado) {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return integer
+     */
+    public function getEstado() {
+        return $this->estado;
+    }
+
+    /**
+     * Set municipio
+     *
+     * @param integer $municipio
+     *
+     * @return Planilla
+     */
+    public function setMunicipio($municipio) {
+        $this->municipio = $municipio;
+
+        return $this;
+    }
+
+    /**
+     * Get municipio
+     *
+     * @return integer
+     */
+    public function getMunicipio() {
+        return $this->municipio;
+    }
+
+    /**
+     * Set parroquia
+     *
+     * @param integer $parroquia
+     *
+     * @return Planilla
+     */
+    public function setParroquia($parroquia) {
+        $this->parroquia = $parroquia;
+
+        return $this;
+    }
+
+    /**
+     * Get parroquia
+     *
+     * @return integer
+     */
+    public function getParroquia() {
+        return $this->parroquia;
+    }
+
+    /**
+     * @var array
+     */
+    private $adicionales;
+
+    /**
+     * Set adicionales
+     *
+     * @param array $adicionales
+     *
+     * @return Planilla
+     */
+    public function setAdicionales($adicionales) {
+        $this->adicionales = $adicionales;
+
+        return $this;
+    }
+
+    /**
+     * Get adicionales
+     *
+     * @return array
+     */
+    public function getAdicionales() {
+        return $this->adicionales;
+    }
+
+    /**
+     * Set naturaleza
+     *
+     * @param integer $naturaleza
+     *
+     * @return Planilla
+     */
+    public function setNaturaleza($naturaleza) {
+        $this->naturaleza = $naturaleza;
+
+        return $this;
+    }
+
+    /**
+     * Get naturaleza
+     *
+     * @return integer
+     */
+    public function getNaturaleza() {
+        return $this->naturaleza;
+    }
+
+    /**
+     * Set condicion
+     *
+     * @param integer $condicion
+     *
+     * @return Planilla
+     */
+    public function setCondicion($condicion) {
+        $this->condicion = $condicion;
+
+        return $this;
+    }
+
+    /**
+     * Get condicion
+     *
+     * @return integer
+     */
+    public function getCondicion() {
+        return $this->condicion;
+    }
+
+    /**
+     * Set sustento
+     *
+     * @param integer $sustento
+     *
+     * @return Planilla
+     */
+    public function setSustento($sustento) {
+        $this->sustento = $sustento;
+
+        return $this;
+    }
+
+    /**
+     * Get solicitud
+     *
+     * @return string
+     */
+    public function getSolicitud() {
+        return $this->solicitud;
+    }
+    
+     /**
+     * Set solicitud
+     *
+     * @param string $solicitud
+     *
+     * @return Planilla
+     */
+    public function setSolicitud($solicitud) {
+        $this->solicitud = $solicitud;
+
+        return $this;
+    }
+
+    /**
+     * Get sustento
+     *
+     * @return integer
+     */
+    public function getSustento() {
+        return $this->sustento;
+    }
+
+    /**
+     * @var string
+     */
+    private $usuarioCreacion;
+
+    /**
+     * @var string
+     */
+    private $usuarioModificacion;
+
+
+    /**
+     * Set usuarioCreacion
+     *
+     * @param string $usuarioCreacion
+     *
+     * @return Planilla
+     */
+    public function setUsuarioCreacion($usuarioCreacion)
+    {
+        $this->usuarioCreacion = $usuarioCreacion;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioCreacion
+     *
+     * @return string
+     */
+    public function getUsuarioCreacion()
+    {
+        return $this->usuarioCreacion;
+    }
+
+    /**
+     * Set usuarioModificacion
+     *
+     * @param string $usuarioModificacion
+     *
+     * @return Planilla
+     */
+    public function setUsuarioModificacion($usuarioModificacion)
+    {
+        $this->usuarioModificacion = $usuarioModificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get usuarioModificacion
+     *
+     * @return string
+     */
+    public function getUsuarioModificacion()
+    {
+        return $this->usuarioModificacion;
+    }
+    
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $solicitantes;
+
+
+    /**
+     * Add solicitante
+     *
+     * @param \Fgimenez\PlanillaBundle\Entity\DocumentoSolicitante $solicitante
+     *
+     * @return Planilla
+     */
+    public function addSolicitante(\Fgimenez\PlanillaBundle\Entity\DocumentoSolicitante $solicitante)
+    {
+        $this->solicitantes[] = $solicitante;
+
+        return $this;
+    }
+
+    /**
+     * Remove solicitante
+     *
+     * @param \Fgimenez\PlanillaBundle\Entity\DocumentoSolicitante $solicitante
+     */
+    public function removeSolicitante(\Fgimenez\PlanillaBundle\Entity\DocumentoSolicitante $solicitante)
+    {
+        $this->solicitantes->removeElement($solicitante);
+    }
+
+    /**
+     * Get solicitantes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSolicitantes()
+    {
+        return $this->solicitantes;
+    }
+
+   
+    /**
+     * @var \Fgimenez\PlanillaBundle\Entity\Estatus
+     */
+    private $ultimo_status;
+
+
+    /**
+     * Set ultimoStatus
+     *
+     * @param \Fgimenez\PlanillaBundle\Entity\Estatus $ultimoStatus
+     *
+     * @return Planilla
+     */
+    public function setUltimoStatus(\Fgimenez\PlanillaBundle\Entity\Estatus $ultimoStatus = null)
+    {
+        $this->ultimo_status = $ultimoStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get ultimoStatus
+     *
+     * @return \Fgimenez\PlanillaBundle\Entity\Estatus
+     */
+    public function getUltimoStatus()
+    {
+        return $this->ultimo_status;
+    }
+    
+   
+    
+    /**
+     * @var string
+     */
+    private $AnalistaAsignado;
+
+
+    /**
+     * Set analistaAsignado
+     *
+     * @param string $analistaAsignado
+     *
+     * @return Planilla
+     */
+    public function setAnalistaAsignado($analistaAsignado)
+    {
+        $this->AnalistaAsignado = $analistaAsignado;
+
+        return $this;
+    }
+
+    /**
+     * Get analistaAsignado
+     *
+     * @return string
+     */
+    public function getAnalistaAsignado()
+    {
+        return $this->AnalistaAsignado;
+    }
+    
+    
+    /**
+     * @var \Mmartin4\MantenimientoBundle\Entity\motivo_reasignacion
+     */
+    private $motivo_reasignacion;
+
+
+    /**
+     * Set motivoReasignacion
+     *
+     * @param \Mmartin4\MantenimientoBundle\Entity\motivo_reasignacion $motivoReasignacion
+     *
+     * @return Planilla
+     */
+    public function setMotivoReasignacion(\Mmartin4\MantenimientoBundle\Entity\motivo_reasignacion $motivoReasignacion = null)
+    {
+        $this->motivo_reasignacion = $motivoReasignacion;
+
+        return $this;
+    }
+
+    /**
+     * Get motivoReasignacion
+     *
+     * @return \Mmartin4\MantenimientoBundle\Entity\motivo_reasignacion
+     */
+    public function getMotivoReasignacion()
+    {
+        return $this->motivo_reasignacion;
+    }
+    /**
+     * @var \Fgimenez\PlanillaBundle\Entity\ValoracionOAC
+     */
+    private $planilla_valoracionOAC;
+
+
+    /**
+     * Set planillaValoracionOAC
+     *
+     * @param \Fgimenez\PlanillaBundle\Entity\ValoracionOAC $planillaValoracionOAC
+     *
+     * @return Planilla
+     */
+    public function setPlanillaValoracionOAC(\Fgimenez\PlanillaBundle\Entity\ValoracionOAC $planillaValoracionOAC = null)
+    {
+        $this->planilla_valoracionOAC = $planillaValoracionOAC;
+
+        return $this;
+    }
+
+    /**
+     * Get planillaValoracionOAC
+     *
+     * @return \Fgimenez\PlanillaBundle\Entity\ValoracionOAC
+     */
+    public function getPlanillaValoracionOAC()
+    {
+        return $this->planilla_valoracionOAC;
+    }
+   
+
+    
+}

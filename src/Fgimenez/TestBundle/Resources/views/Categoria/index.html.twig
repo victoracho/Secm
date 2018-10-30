@@ -1,0 +1,216 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - categorium 
+{% endblock %}
+
+{% block page_content %}
+
+
+
+
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <div class="box box-primary">
+
+
+                <div class="box-header with-border">
+                    <h3 class="box-title"><a href="{{ path('categoria_crud') }}">Categoria</a> </h3>
+                </div>               
+
+                <!-- FILTERING -->
+                <div class="col-md-12">
+                    <div  id="filters" class="collapse">
+
+                        <form class="well" action="{{ path('categoria_crud') }}" method="get" >
+                            <div class="row">
+
+                                <div class="col-md-6">{{ form_row(filterForm.id) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.titulo) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.descripcion) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.imagen) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.slug) }}</div>
+
+
+                                <div class="col-md-6">{{ form_row(filterForm.publicado) }}</div>
+
+                                <div class="col-md-6">
+                                    {{ form_rest(filterForm) }}
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-warning" name="filter_action" value="filter"> <span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtro</button>
+                                        <button type="submit" class="btn btn-default" name="filter_action" value="reset"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- END FILTERING -->
+
+
+                <div class="col-md-3 pull-left">
+
+                    <!-- PAGE SIZE -->
+                    <div class="pagination form-inline ">
+                        <select class = "form-control"  onchange="window.location = this.value" >
+                            <option value='{{ path('categoria_crud', app.request.query.all|merge({'pcg_show': '10'})) }}' {% if app.request.get('pcg_show') == 10 %} selected {% endif %}>10</option>
+                            <option value='{{ path('categoria_crud', app.request.query.all|merge({'pcg_show': '20'})) }}' {% if app.request.get('pcg_show') == 20 %} selected {% endif %}>20</option>
+                            <option value='{{ path('categoria_crud', app.request.query.all|merge({'pcg_show': '50'})) }}' {% if app.request.get('pcg_show') == 50 %} selected {% endif %}>50</option>
+                            <option value='{{ path('categoria_crud', app.request.query.all|merge({'pcg_show': '100'})) }}' {% if app.request.get('pcg_show') == 100 %} selected {% endif %}>100</option>
+                            <option value='{{ path('categoria_crud', app.request.query.all|merge({'pcg_show': '500'})) }}' {% if app.request.get('pcg_show') == 500 %} selected {% endif %}>500</option>
+                        </select>
+                    </div>
+                    <!-- END PAGE SIZE -->
+
+                </div>
+
+                <div class="col-md-6">
+
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <a class="btn btn-primary h3 pull-right" href="{{ path('categoria_crud_new') }}" style="margin-bottom:10px">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuevo
+                    </a>
+                    <a class="btn dropdown-toggle pull-right h3" data-toggle="collapse" data-target="#filters">
+                        Filtro
+                        <span class="caret"></span>
+                    </a>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        {% for type, flashMessages in app.session.flashbag.all() %} 
+                            {% for flashMessage in flashMessages %}
+                                <div class="alert alert-{{ type }}">
+                                    {{ flashMessage|raw }}
+                                </div>
+                            {% endfor %} 
+                        {% endfor %} 
+                    </div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="table-responsive col-md-12">
+
+
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">Registros categorium</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+
+                                <form method="POST" id="bulk_form" action="{{ path('categoria_crud_bulk_action') }} ">
+                                    <table id="example2" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th width="20px"><input type="checkbox" class="check-all" onclick="toggleAll(this)"></th>
+
+                                                {% import "PetkoparaCrudGeneratorBundle::macros/th_sortable.html.twig" as macros %}
+                                                <th>{{macros.th_sortable('imagen',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'categoria_crud')}}</th>
+                                                <th>{{macros.th_sortable('titulo',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'categoria_crud')}}</th>
+                                                <th>{{macros.th_sortable('slug',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'categoria_crud')}}</th>
+                                                <th>{{macros.th_sortable('publicado',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'categoria_crud')}}</th>
+                                                <th width = "130px">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for categorium in categorias %}
+                                                <tr>
+                                                    <td><input type="checkbox" name="ids[]" onclick='bulkSubmitBtnManage();' class="check-all" value="{{categorium.id}}"/></td>
+                                                    <td>
+                                                        <img class="img-responsive" width="100" src="/uploads/test_categoria/{{ categorium.imagen }}" /></td>
+                                                    <td><a href="{{ path('categoria_crud_edit', { 'id': categorium.id }) }}">{{ categorium.titulo }}</a></td>
+                                                    <td>{{ categorium.slug }}</td>
+                                                    <td>{%- if categorium.publicado %}Si{% else %}No{% endif %}</td>
+                                                    <td class="actions">
+                                                        <a  onclick="return confirm('Are you sure!');" title="Delete" class="btn btn-danger btn-sm" href="{{ path('categoria_crud_by_id_delete', { 'id': categorium.id}) }}">
+                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                        </a>
+                                                        <a title='Show' class="btn btn-info btn-sm" href="{{ path('categoria_crud_show', { 'id': categorium.id }) }}">
+                                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                                        </a>
+                                                        <a  title='Edit' class="btn btn-primary btn-sm" href="{{ path('categoria_crud_edit', { 'id': categorium.id }) }}">
+                                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+
+                                    </table>
+                                </form>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+
+                    </div>
+
+                </div>           
+
+
+
+
+
+                <div class="row">
+                    <div class="col-md-4 pull-left">
+                        <div class="pagination form-inline ">
+                            <select class = "form-control" name="bulk_action" >
+                                <option value="">--Choose--</option>
+                                <option value="delete">DELETE</option>
+                            </select>
+                            <input type="submit" id='bulkSubmitBtn' form="bulk_form" class="form-control btn btn-danger btn-sm" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-md-offset-2 text-right">
+                        {{ pagerHtml|raw }} 
+                    </div>
+                </div> <!-- /#bottom -->
+
+                <script>
+                    $(function () {
+                        $('#example2').DataTable({
+                            "paging": false,
+                            "lengthChange": false,
+                            "searching": false,
+                            "ordering": true,
+                            "info": true,
+                            "autoWidth": false
+                        });
+                    });
+                </script>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+

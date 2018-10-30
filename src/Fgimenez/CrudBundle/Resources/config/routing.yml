@@ -1,0 +1,3 @@
+fgimenez_crud_homepage:
+    path:     /
+    defaults: { _controller: FgimenezCrudBundle:Default:index }

@@ -1,0 +1,167 @@
+{{ "{% extends '"~  base_template  ~ "' %}" }}
+
+{{ "{% block title %}" }}
+{{ "{{ parent() }}" }} - {{ entity_singularized }} 
+{{ "{% endblock %}" }}
+
+{{ "{% block page_content %}" }}
+
+
+
+
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <div class="box box-primary">
+
+
+            <div class="box-header with-border">
+                <h3 class="box-title"><a href="{{ "{{ path('"~ route_name_prefix ~"') }}" }}">{{ entity }}</a> </h3>
+            </div>
+
+
+
+            {%- if filter_type == 'form'%}
+            {% include 'crud/views/others/form_filter_header.html.twig.twig' %}
+            {% elseif filter_type =='input' %}
+                {% include 'crud/views/others/multi_search_header.html.twig.twig' %}
+
+                {% endif %}
+
+
+
+
+
+                    {% include 'crud/views/others/flash_messages.html.twig.twig' %}
+
+                    <div class="row">
+
+                        <div class="table-responsive col-md-12">
+
+
+
+
+                            <div class="box">
+                                <div class="box-header">
+                                    <h3 class="box-title">Registros {{ entity_singularized }}</h3>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+
+                                    {% if without_bulk_action == false %}
+                                        <form method="POST" id="bulk_form" action="{{ "{{ path('"~ route_name_prefix ~"_bulk_action') }}" }} ">
+                                        {% endif %}
+                                        <table id="example2" class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    {% if without_bulk_action == false %}
+                                                        <th width="20px"><input type="checkbox" class="check-all" onclick="toggleAll(this)"></th>
+                                                        {% endif %}
+
+                                                    {% if without_sorting == false %}
+                                                        {{'{% import "PetkoparaCrudGeneratorBundle::macros/th_sortable.html.twig" as macros %}'}}
+                                                        {% for field, metadata in fields %}
+                                                            <th>{{"{{macros.th_sortable('" ~field~"',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , '" ~ route_name_prefix ~ "')}}"}}</th>
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            {% for field, metadata in fields %}
+                                                            <th>{{ field|capitalize }}</th>
+                                                            {% endfor %}
+                                                        {% endif %}
+
+
+                                                    <th width = "130px">Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{ '{% for ' ~ entity_singularized ~ ' in ' ~ entity_pluralized ~ ' %}' }}
+                                                <tr>
+                                                    {% if without_bulk_action == false %}
+                                                        <td><input type="checkbox" name="ids[]" onclick='bulkSubmitBtnManage();' class="check-all" value="{{ "{{" ~entity_singularized ~ "."~ identifier~"}}" }}"/></td>
+                                                        {% endif %}
+                                                        {% for field, metadata in fields %}
+                                                            {% if loop.first and ('edit' in actions) %}
+                                                            <td><a href="{{ "{{ path('" ~ route_name_prefix ~ "_edit', { 'id': " ~ entity_singularized ~ "."~ identifier ~" }) }}" }}">{{ '{{ ' ~ entity_singularized ~ '.' ~ field|replace({'_': ''}) ~ ' }}' }}</a></td>
+                                                            {% elseif metadata.type in ['datetime', 'datetimetz'] %}
+                                                            <td>{{ '{%- if ' ~ entity_singularized ~ '.' ~ field|replace({'_': ''}) ~ ' %}{{ ' ~ entity_singularized ~ '.' ~ field|replace({'_': ''}) ~ '|date(\'Y-m-d H:i:s\') }}{% endif %}' }}</td>
+                                                        {% elseif metadata.type in ['date'] %}
+                                                            <td>{{ '{%- if ' ~ entity_singularized ~ '.' ~ field|replace({'_': ''}) ~ ' %}{{ ' ~ entity_singularized ~ '.' ~ field|replace({'_': ''}) ~ '|date(\'Y-m-d\') }}{% endif %}' }}</td>
+                                                        {% elseif metadata.type in ['time'] %}
+                                                            <td>{{ '{%- if ' ~ entity_singularized ~ '.' ~ field|replace({'_': ''}) ~ ' %}{{ ' ~ entity_singularized ~ '.' ~ field|replace({'_': ''}) ~ '|date(\'H:i:s\') }}{% endif %}' }}</td>
+                                                        {% elseif metadata.type in ['array'] %}
+                                                            <td>{{ '{%- if ' ~ entity_singularized ~ '.' ~ field|replace({'_': ''}) ~ ' %}{{ ' ~ entity_singularized ~ '.' ~ field|replace({'_': ''}) ~ '|join(\', \') }}{% endif %}' }}</td>
+                                                        {% elseif metadata.type in ['boolean'] %}
+                                                            <td>{{ '{%- if ' ~ entity_singularized ~ '.' ~ field|replace({'_': ''}) ~ ' %}Yes{% else %}No{% endif %}' }}</td>
+                                                        {% else %}
+                                                            <td>{{ '{{ ' ~ entity_singularized ~ '.' ~ field|replace({'_': ''}) ~ ' }}' }}</td>
+                                                        {% endif %}
+                                                        {% if loop.last %}
+
+                                                            <td class="actions">
+                                                                {%- include "crud/views/others/actions.html.twig.twig" %}
+                                                            </td>
+
+                                                        {% endif %}
+                                                    {% endfor %}
+
+                                                </tr>
+                                                {{ '{% endfor %}' }}
+                                            </tbody>
+
+                                        </table>
+                                        {% if without_bulk_action == false %}
+                                        </form>
+                                    {% endif %}
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+
+                        </div>
+
+                    </div>           
+
+
+
+
+
+                    <div class="row">
+                        {% if without_bulk_action == false %}
+                            <div class="col-md-4 pull-left">
+                                <div class="pagination form-inline ">
+                                    <select class = "form-control" name="bulk_action" >
+                                        <option value="">--Choose--</option>
+                                        <option value="delete">DELETE</option>
+                                    </select>
+                                    <input type="submit" id='bulkSubmitBtn' form="bulk_form" class="form-control btn btn-danger btn-sm" disabled>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="col-md-6 col-md-offset-2 text-right">
+                            {{' {{ pagerHtml|raw }} '}}
+                        </div>
+                    </div> <!-- /#bottom -->
+
+
+                </div>
+
+            </div>
+        </div>
+        {{ "{% endblock %}" }}
+
+        {{ "{% block javascripts_inline %}" }}
+        <script>
+            $(function () {
+                $('#example2').DataTable({
+                    "paging": false,
+                    "lengthChange": false,
+                    "searching": false,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false
+                });
+            });
+        </script>
+
+        {{ "{% endblock %}" }}

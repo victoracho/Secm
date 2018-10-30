@@ -1,0 +1,126 @@
+planilla:
+    path:  /
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:index" }
+
+planilla_show:
+    path:  /{id}/ver
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:show" }
+    
+planilla_asignar:
+    path:  /{id}/asignar
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:AsignarCaso" }
+    requirements: { _method: post }
+    
+
+planilla_new:
+    path:  /nuevo
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:new" }
+    requirements: { _method: post|put }
+
+planilla_edit:
+    path:  /{id}/editar
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:edit" }
+    requirements: { _method: post }
+
+planilla_agregar_soportes:
+    path:  /{id}/soportes
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:agregarSoportes" }
+    requirements: { _method: post }
+    
+planilla_delete:
+    path:  /{id}/delete
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:delete" }
+    requirements: { _method: post|delete }
+   
+planilla_bulk_action:
+    path:  /bulk-action
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:bulk" }
+    requirements: { _method: post }
+    
+planilla_cambiar_estatus:
+    path:  /{id}/cambiarestatus
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:cambiarEstatus" }
+    requirements: { _method: post|put }  
+    
+planilla_mostrar_formulario:
+    path:  /mostrarformulario
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:mostrarFormulario" }
+    requirements: { _method: post }
+    
+planilla_guardar:
+    path:  /guardar
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:guardarDatos" }
+    
+    
+planilla_guardar_edit:
+    path:  /{id}/guardar_edit
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:guardarEditar" }
+    requirements: { _method: post|put }
+    
+#planilla_create:
+#    path:  /create
+#    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:create" }
+#    requirements: { _method: post }
+
+
+
+#planilla_update:
+#    path:  /{id}/update
+#    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:update" }
+#    requirements: { _method: post|put }
+
+
+#planilla_by_id_delete:
+#    path:  /delete/{id}
+#    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:deleteById" }
+#    requirements: { _method: get }
+
+planilla_index_asignar:
+    path:  /listado
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:indexAsignar" }
+
+
+   
+
+planilla_iniciar_valoracion:
+    path:  /{id}/iniciar
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:iniciarValoracion" }
+    requirements: { _method: post }
+    
+planilla_valorar:
+    path:  /{id}/valorar
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:valorarCaso" }
+    requirements: { _method: post }
+
+planilla_reversar:
+    path:  /{id}/reversar
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:ReversarCaso" }
+    requirements: { _method: post }
+
+planilla_index_remitir:
+    path:  /listado_remision
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:indexRemitir" }
+
+planilla_remitir_caso:
+    path:  /{id}/remitir
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:remitirCaso" }
+    requirements: { _method: post }
+    
+planilla_remitir_caso_externo:
+    path:  /{id}/remitir_externo
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:remitirCasoExterno" }
+    requirements: { _method: post }
+    
+planilla_remision_pdf:
+    path:  /pdfremision/{id}
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:RemisionPDF" }
+    
+planilla_oficio_remision_pdf:
+    path:  /pdfoficioremision/{id}
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:OficioRemisionPDF" }
+    
+planilla_nota_remsion:
+    path:  /{id}/nota_remision
+    defaults: { _controller: "FgimenezPlanillaBundle:Planilla:generarNotaRemision" }
+    requirements: { _method: post }
+    

@@ -1,0 +1,26 @@
+Fgimenez\PlanillaBundle\Entity\TipoAtencion:
+    type: entity
+    table: oac.tipo_atencion
+    repositoryClass: Fgimenez\PlanillaBundle\Repository\TipoAtencionRepository
+
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        nombre:
+            type: string
+            length: 255
+            unique: true
+        descripcion:
+            type: text
+            nullable: true
+        status:
+            type: integer            
+            nullable: false
+            options:
+                default: '0'
+
+

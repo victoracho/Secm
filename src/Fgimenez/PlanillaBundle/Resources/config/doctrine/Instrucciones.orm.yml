@@ -1,0 +1,15 @@
+Fgimenez\PlanillaBundle\Entity\Instrucciones:
+    type: entity
+    table: generico.instrucciones
+    repositoryClass: Fgimenez\PlanillaBundle\Repository\InstruccionesRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        nombre:
+            type: string
+            length: '50'
+    lifecycleCallbacks: {  }

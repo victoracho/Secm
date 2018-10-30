@@ -1,0 +1,26 @@
+Fgimenez\PlanillaBundle\Entity\Aplicaciones:
+    type: entity
+    table: seguridad.aplicaciones
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: SEQUENCE
+    fields:
+        nombre:
+            type: string
+            nullable: false
+            length: 180
+        dominio:
+            type: string
+            nullable: true
+            length: 50
+        alias:
+            type: string
+            nullable: true
+            length: 50
+    lifecycleCallbacks: {  }

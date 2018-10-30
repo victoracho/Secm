@@ -1,0 +1,42 @@
+Fgimenez\DocumentoBundle\Entity\TipoDocumento:
+    type: entity
+    table: generico.tipo_soporte
+    repositoryClass: Fgimenez\DocumentoBundle\Repository\TipoDocumentoRepository
+    
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        nombre:
+            type: string
+            length: 255
+            unique: true
+        descripcion:
+            type: text
+            nullable: true
+        status:
+            type: string
+            length: '2' 
+            nullable: true
+
+        updatedAt:
+            type: datetime
+            column: updated_at
+            nullable: true
+        createdAt:
+            type: datetime
+            column: created_at
+            options:
+                default: now()
+        ultimoUsuario:
+            type: string
+            length: 255
+            column: ultimo_usuario
+            options:
+                default: ''
+    lifecycleCallbacks:     
+        prePersist: [setCreatedAtValue]
+        preUpdate:  [setUpdatedAtValue]       

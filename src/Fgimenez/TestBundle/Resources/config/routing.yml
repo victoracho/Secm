@@ -1,0 +1,19 @@
+fgimenez_test_categoria_crud:
+    resource: "@FgimenezTestBundle/Resources/config/routing/categoria.yml"
+    prefix:   /categoria/crud
+
+
+
+fgimenez_test_homepage:
+    path:     /
+    defaults: { _controller: FgimenezTestBundle:Default:index }
+
+
+
+fgimenez_test_noticia_crud:
+        resource: "@FgimenezTestBundle/Resources/config/routing/noticia.yml"
+        prefix:   /noticia/crud
+        
+fgimenez_test_noticia_front:
+        resource: "@FgimenezTestBundle/Resources/config/routing/noticia_front.yml"
+        prefix:   /noticia        

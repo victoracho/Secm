@@ -1,0 +1,120 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+  {{ parent() }}
+  -pacientes
+{% endblock %}
+
+{% block page_content %}
+
+  <div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+      <div class="box box-primary">
+
+        <!-- FILTERING -->
+
+        <!-- END FILTERING -->
+
+        <div class="col-md-3 pull-left">
+
+          <!-- PAGE SIZE -->
+          <div class="pagination form-inline ">
+              <select class = "form-control"  onchange="window.location = this.value" >
+                  <option value='{{ path('bulk_pruebas', app.request.query.all|merge({'pcg_show': '10'})) }}' {% if app.request.get('pcg_show') == 10 %} selected {% endif %}>10</option>
+                  <option value='{{ path('bulk_pruebas', app.request.query.all|merge({'pcg_show': '20'})) }}' {% if app.request.get('pcg_show') == 20 %} selected {% endif %}>20</option>
+                  <option value='{{ path('bulk_pruebas', app.request.query.all|merge({'pcg_show': '50'})) }}' {% if app.request.get('pcg_show') == 50 %} selected {% endif %}>50</option>
+                  <option value='{{ path('bulk_pruebas', app.request.query.all|merge({'pcg_show': '100'})) }}' {% if app.request.get('pcg_show') == 100 %} selected {% endif %}>100</option>
+                  <option value='{{ path('bulk_pruebas', app.request.query.all|merge({'pcg_show': '500'})) }}' {% if app.request.get('pcg_show') == 500 %} selected {% endif %}>500</option>
+              </select>
+          </div>
+          <!-- END PAGE SIZE -->
+
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            {% for type, flashMessages in app.session.flashbag.all() %}
+              {% for flashMessage in flashMessages %}
+                <div class="alert alert-{{ type }}">
+                  {{ flashMessage|raw }}
+                </div>
+              {% endfor %}
+            {% endfor %}
+          </div>
+        </div>
+
+
+
+        <div class="row">
+
+          <div class="table-responsive col-md-12">
+
+            <div class="box">
+              <br>
+              <br>
+              <div class="box-header" style=" text-align: center;">
+                <h3 class="box-title">Lista de Resultados
+                </h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+
+                <form method="POST" id="bulk_form" action="#">
+                  <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+
+
+                  {% import "PetkoparaCrudGeneratorBundle::macros/th_sortable.html.twig" as macros %}
+                        <th>{{macros.th_sortable('Nombre',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'bulk_pruebas')}}</th>
+                        <th>{{macros.th_sortable('Fecha de Nacimiento',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'bulk_pruebas')}}</th>
+                        <th>{{macros.th_sortable('Pais',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'bulk_pruebas')}}</th>
+                        <th>{{macros.th_sortable('Edad',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'bulk_pruebas')}}</th>
+                        <th>{{macros.th_sortable('Ip',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'bulk_pruebas')}}</th>
+                        <th>{{macros.th_sortable('Navegador',app.request.get('pcg_sort_col'), app.request.get('pcg_sort_order') , 'bulk_pruebas')}}</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for prueba in pruebas %}
+                      <tr>
+                          <td>{{prueba.nombre}}</td>
+                            <td>{{prueba.fechaNac}}</td>
+                           <td>{{prueba.pais}}</td>
+                           <td>{{prueba.edad}}</td>
+                           <td>{{prueba.ip}}</td>
+                           <td>{{prueba.navegador}}</td>
+
+
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+
+                  </table>
+                </form>
+              </div>
+              <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+          </div>
+
+        </div>
+        <div class="row">
+
+
+            <div class="col-md-5 text-right">
+                 {{ pagerHtml|raw }}
+            </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascripts_inline %}
+
+{% endblock %}
